@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.5
+// @version      0.4.6
 // @license      http://www.wtfpl.net/txt/copying/
 // @icon         http://torviet.com/pic/salad.png
 // @description  A small script to simplify the shoutbox
@@ -27,6 +27,7 @@ $(function(){
     $('.navigation_page').css('width', 'auto');
     $('#boxQuestion').css('height', $(window).height() - getRemainingHeight() - 20);
     $('#emo-section').css('height', $(window).height() - getRemainingHeight() - 22);
+    $('.slimScrollDiv, .emo-group-detail').css('height', $(window).height() - getRemainingHeight() - 32);
 
     // Alter existing element attributes
     $('#emogroup option:contains("Voz")').prop('selected', true);
