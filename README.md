@@ -1,6 +1,3 @@
-# TorViet-Shoutbox-Enhancer
-A small script to simplify the shoutbox
-
 <p>The goal of this script is to remove the distracting stuffs around the shoutbox.</p>
 <p>Here are what it does:
 <ul>
