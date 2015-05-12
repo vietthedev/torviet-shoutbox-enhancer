@@ -1,8 +1,10 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.6
+// @version      0.4.7
 // @license      http://www.wtfpl.net/txt/copying/
+// @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
+// @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
 // @icon         http://torviet.com/pic/salad.png
 // @description  A small script to simplify the shoutbox
 // @author       Salad
@@ -12,10 +14,7 @@
 
 $(function(){
     // Remove unneeded stuffs
-    $('#boxHead').remove();
-    $('.marquee').remove();
-    $('#sltTheme').remove();
-    $('#clock').remove();
+    $('#boxHead, .marquee, #sltTheme, #clock').remove();
 
     // Alter existing element CSS
     $('.all-wrapper').css({
@@ -45,6 +44,7 @@ $(function(){
     toggleEmoSlt();
     $('#emogroup').change();
     $('#idQuestion').focus();
+    
     setTimeout(function(){
         addEmoticons(707, 707);
         addEmoticons(200, 234);
