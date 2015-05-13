@@ -86,4 +86,5 @@ $(function(){
     
     // Run at startup
     toggleEmoSlt();
+    $('#idQuestion').focus();
 });
