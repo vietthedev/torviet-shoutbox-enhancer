@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.8
+// @version      0.4.9
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -53,6 +53,11 @@ $(function(){
         $('#idQuestion').focus();
     });
 
+    if ($.browser.mozilla)
+        $(document).keypress(changeEmoticonCollection);
+    else
+        $(document).keydown(changeEmoticonCollection);
+
     function getRemainingHeight() {
         return $('.input-section').parent().height() + $('.navigation_page').height();
     }
@@ -66,5 +71,14 @@ $(function(){
         }
 
         return emos;
+    }
+
+    function changeEmoticonCollection(e) {
+        if (e.keyCode == 40)
+            $('#emogroup option:selected').next().prop('selected', true);
+        if (e.keyCode == 38)
+            $('#emogroup option:selected').prev().prop('selected', true);
+
+        $('#emogroup').change();
     }
 });
