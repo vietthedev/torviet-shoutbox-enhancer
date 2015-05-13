@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.10
+// @version      0.4.11
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -54,9 +54,9 @@ $(function(){
     });
 
     if ($.browser.mozilla)
-        $(document).keypress(changeEmoticonCollection);
+        $(window.self).keypress(changeEmoticonCollection);
     else
-        $(document).keydown(changeEmoticonCollection);
+        $(window.self).keydown(changeEmoticonCollection);
 
     function getRemainingHeight() {
         return $('.input-section').parent().height() + $('.navigation_page').height();
