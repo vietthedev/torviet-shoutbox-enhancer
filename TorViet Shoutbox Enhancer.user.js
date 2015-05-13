@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.7
+// @version      0.4.8
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 $(function(){
-    // Remove unneeded stuffs
+    // Remove unneeded elements
     $('#boxHead, .marquee, #sltTheme, #clock').remove();
 
     // Alter existing element CSS
@@ -28,8 +28,11 @@ $(function(){
     $('#emo-section').css('height', $(window).height() - getRemainingHeight() - 22);
     $('.slimScrollDiv, .emo-group-detail').css('height', $(window).height() - getRemainingHeight() - 32);
 
-    // Alter existing element attributes
-    $('#emogroup option:contains("Voz")').prop('selected', true);
+    // Alter existing elements
+    $('.emo-group-detail').empty();
+    $('.emo-group-detail').append(getEmoticons(524, 574));
+    $('.emo-group-detail').append(getEmoticons(707, 707));
+    $('.emo-group-detail').append(getEmoticons(200, 234));
 
     // Add elements
     var myScript = document.createElement('script');
@@ -42,32 +45,26 @@ $(function(){
 
     // Functions
     toggleEmoSlt();
-    $('#emogroup').change();
     $('#idQuestion').focus();
-    
-    setTimeout(function(){
-        addEmoticons(707, 707);
-        addEmoticons(200, 234);
 
-        $('a.btuEmotion').click(function(){
-            var number = parseInt($(this).attr('alt').substr(3));
-            if (number >= 524 && number <= 574)
-                return;
-
-            var x = $('#idQuestion').attr('value');
-            $('#idQuestion').attr('value', x + $(this).attr('alt'));
-            $('#idQuestion').focus();
-        });
-    }, 200);
+    $('a.btuEmotion').click(function(){
+        var x = $('#idQuestion').attr('value');
+        $('#idQuestion').attr('value', x + $(this).attr('alt'));
+        $('#idQuestion').focus();
+    });
 
     function getRemainingHeight() {
         return $('.input-section').parent().height() + $('.navigation_page').height();
     }
 
-    function addEmoticons(start, end) {
+    function getEmoticons(start, end) {
+        var emos = '';
+
         for (i = start; i <= end; i++) {
             var emo = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin:0px 0px 0px 0px;" class="btuEmotion" alt="[em' + i + ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + i + '.gif" alt=""></a></div>';
-            $('.emo-group-detail').append(emo);
+            emos += emo;
         }
+
+        return emos;
     }
 });
