@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.12
+// @version      0.4.13
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -43,21 +43,19 @@ $(function(){
     $('.input-section-a').append(myScript);
     $('.input-section-a').append('<input type="button" value="Toggle" onclick="toggleEmoSlt()" />');
 
-    // Functions
-    toggleEmoSlt();
-    $('#idQuestion').focus();
-
+    // Override functions
     $('a.btuEmotion').click(function(){
-        var x = $('#idQuestion').attr('value');
-        $('#idQuestion').attr('value', x + $(this).attr('alt'));
+        var value = $('#idQuestion').val();
+        $('#idQuestion').val(value + $(this).attr('alt'));
         $('#idQuestion').focus();
     });
 
-    if ($.browser.mozilla)
-        $(window).keypress(changeEmoticonCollection);
+    if (typeof InstallTrigger !== 'undefined') // Firefox detection
+        $(window).keypress(changeEmoGroup);
     else
-        $(window).keydown(changeEmoticonCollection);
+        $(window).keydown(changeEmoGroup);
 
+    // Custom functions
     function getRemainingHeight() {
         return $('.input-section').parent().height() + $('.navigation_page').height();
     }
@@ -73,14 +71,19 @@ $(function(){
         return emos;
     }
 
-    function changeEmoticonCollection(e) {
-        if (e.keyCode == 40) {
-            $('#emogroup option:selected').next().prop('selected', true);
-            $('#emogroup').change();
-        }
-        if (e.keyCode == 38) {
-            $('#emogroup option:selected').prev().prop('selected', true);
-            $('#emogroup').change();
+    function changeEmoGroup(e) {
+        switch (e.keyCode) {
+            case 40:
+                $('#emogroup option:selected').next().prop('selected', true);
+                $('#emogroup').change();
+                break;
+            case 38:
+                $('#emogroup option:selected').prev().prop('selected', true);
+                $('#emogroup').change();
+                break;
         }
     }
+    
+    // Run at startup
+    toggleEmoSlt();
 });
