@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.14
+// @version      0.4.15
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -33,16 +33,13 @@ $(function(){
 
     // Alter existing elements.
     $('.emo-group-detail').empty();
-    $('.emo-group-detail').append(getEmoticons(524, 574));
-    $('.emo-group-detail').append(getEmoticons(707));
-    $('.emo-group-detail').append(getEmoticons(200, 234));
+    $('.emo-group-detail').append(getEmoticons(524, 574), getEmoticons(707), getEmoticons(200, 234));
 
     // Add elements.
     var myScript = document.createElement('script');
     myScript.type = 'text/javascript';
     myScript.innerHTML = 'function toggleEmoSlt(){$(".emo-group-title-wrapper").slideToggle();}';
-    $('.input-section-a').append(myScript);
-    $('.input-section-a').append('<input type="button" value="Toggle" onclick="toggleEmoSlt()" />');
+    $('.input-section-a').append(myScript, '<input type="button" value="Toggle" onclick="toggleEmoSlt()" />');
 
     // Firefox detection.
     if (typeof InstallTrigger !== 'undefined')
