@@ -12,7 +12,7 @@
 // @grant        none
 // ==/UserScript==
 
-$(function(){
+$(function() {
     // Remove unneeded elements.
     $('#boxHead, .marquee, #sltTheme, #clock').remove();
 
