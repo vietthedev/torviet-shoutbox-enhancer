@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.15
+// @version      0.4.16
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -32,8 +32,7 @@ $(function(){
     $('.slimScrollDiv, .emo-group-detail').css('height', windowHeight - remainingHeight - 32);
 
     // Alter existing elements.
-    $('.emo-group-detail').empty();
-    $('.emo-group-detail').append(getEmoticons(524, 574), getEmoticons(707), getEmoticons(200, 234));
+    $('.emo-group-detail').empty().append(getEmoticons(524, 574), getEmoticons(707), getEmoticons(200, 234));
 
     // Add elements.
     var myScript = document.createElement('script');
