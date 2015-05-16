@@ -56,7 +56,7 @@
     btnToggle.onclick = toggleEmoSlt;
     idQuestion.parentNode.insertBefore(btnToggle, null);
 
-    // Add event listeners
+    // Add event listeners.
     // Firefox detection.
     if (typeof InstallTrigger !== 'undefined')
         document.addEventListener('keypress', keyEvent);
