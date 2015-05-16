@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5
+// @version      0.5.1
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -36,15 +36,15 @@
     var windowHeight = window.innerHeight;
     var remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
 
-    allWrapper.style.backgroundImage = 'none';
+    allWrapper.style.background = 'none';
     allWrapper.style.margin = 'auto';
     allWrapper.style.height = windowHeight + 'px';
     inputSection.parentNode.style.padding = '0px';
     navigationPage.style.width = 'auto';
     boxQuestion.style.height = windowHeight - remainingHeight + 2 + 'px';
-    emoGroupDetail.parentNode.parentNode.style.height = windowHeight - remainingHeight + 'px';
-    emoGroupDetail.parentNode.style.height =
-        emoGroupDetail.style.height = windowHeight - remainingHeight - 32 + 'px';
+    emoGroupDetail.parentNode.parentNode.style.height =
+        emoGroupDetail.parentNode.style.height =
+        emoGroupDetail.style.height = windowHeight - remainingHeight + 'px';
 
     // Alter existing elements.
     emoGroupDetail.innerHTML = getEmoticons(524, 574) + getEmoticons(707) + getEmoticons(200, 234);
@@ -58,7 +58,7 @@
 
     // Add event listeners.
     // Firefox detection.
-    if (typeof InstallTrigger !== 'undefined')
+    if (typeof InstallTrigger !== undefined)
         document.addEventListener('keypress', keyEvent);
     else
         document.addEventListener('keydown', keyEvent);
