@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.1
+// @version      0.5.2
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -58,10 +58,7 @@
 
     // Add event listeners.
     // Firefox detection.
-    if (typeof InstallTrigger !== 'undefined')
-        document.addEventListener('keypress', keyEvent);
-    else
-        document.addEventListener('keydown', keyEvent);
+    typeof InstallTrigger !== 'undefined' ? document.addEventListener('keypress', keyEvent) : document.addEventListener('keydown', keyEvent);
 
     // Custom functions.
     function toggleEmoSlt() {
@@ -71,7 +68,7 @@
     function getEmoticons(start, end) {
         var emos = '';
 
-        if (end === undefined)
+        if (end === void 0)
             emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin:0px 0px 0px 0px;" class="btuEmotion" alt="[em' + start +
                 ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + start +
                 '.gif" alt=""></a></div>';
@@ -87,15 +84,12 @@
     function keyEvent(e) {
         switch (e.keyCode) {
             case 40:
-                if (emoGroup.selectedIndex !== emoGroup.length - 1)
-                    emoGroup.selectedIndex++;
+                emoGroup.selectedIndex !== emoGroup.length - 1 && emoGroup.selectedIndex++;
                 changeEmoGroup();
                 break;
             case 38:
-                if (emoGroup.selectedIndex !== 0)
-                    emoGroup.selectedIndex--;
-                changeEmoGroup();
-                break;
+                emoGroup.selectedIndex !== 0 && emoGroup.selectedIndex--,
+                    changeEmoGroup();
             default:
         }
     }
@@ -105,10 +99,8 @@
         request.open('POST', 'qa_smiley_ajax.php', true);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request.onreadystatechange = function() {
-            if (request.readyState == 4 && request.status == 200) {
-                emoGroupDetail.innerHTML = JSON.parse(request.responseText).str;
-                addEmoGroupEvent();
-            }
+            request.readyState == 4 && request.status == 200 && (emoGroupDetail.innerHTML = JSON.parse(request.responseText).str,
+                                                                 addEmoGroupEvent())
         };
         request.send('group=' + emoGroup.value);
     }
