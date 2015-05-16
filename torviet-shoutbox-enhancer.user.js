@@ -58,7 +58,7 @@
 
     // Add event listeners.
     // Firefox detection.
-    if (typeof InstallTrigger !== undefined)
+    if (typeof InstallTrigger !== 'undefined')
         document.addEventListener('keypress', keyEvent);
     else
         document.addEventListener('keydown', keyEvent);
