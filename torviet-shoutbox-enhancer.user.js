@@ -96,7 +96,7 @@
 
     function changeEmoGroup() {
         var request = new XMLHttpRequest();
-        request.open('POST', 'qa_smiley_ajax.php', true);
+        request.open('POST', 'qa_smiley_ajax.php', !0);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request.onreadystatechange = function() {
             request.readyState == 4 && request.status == 200 && (emoGroupDetail.innerHTML = JSON.parse(request.responseText).str,
