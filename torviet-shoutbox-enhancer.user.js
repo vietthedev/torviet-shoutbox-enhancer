@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.4.16
+// @version      0.5
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -12,47 +12,62 @@
 // @grant        none
 // ==/UserScript==
 
-$(function() {
+(function() {
+    // Declare variables
+    var boxHead = document.getElementById('boxHead'),
+        marquee = document.getElementsByClassName('marquee')[0],
+        sltTheme = document.getElementById('sltTheme'),
+        clock = document.getElementById('clock'),
+        allWrapper = document.getElementsByClassName('all-wrapper')[0],
+        inputSection = document.getElementsByClassName('input-section')[0],
+        idQuestion = document.getElementById('idQuestion'),
+        navigationPage = document.getElementsByClassName('navigation_page')[0],
+        boxQuestion = document.getElementById('boxQuestion'),
+        emoGroup = document.getElementById('emogroup'),
+        emoGroupDetail = document.getElementsByClassName('emo-group-detail')[0];
+
     // Remove unneeded elements.
-    $('#boxHead, .marquee, #sltTheme, #clock').remove();
+    boxHead.parentNode.removeChild(boxHead);
+    marquee.parentNode.removeChild(marquee);
+    sltTheme.parentNode.removeChild(sltTheme);
+    clock.parentNode.removeChild(clock);
 
     // Alter existing element CSS.
-    var windowHeight = $(window).height();
-    var remainingHeight = $('.input-section').parent().height() + $('.navigation_page').height();
+    var windowHeight = window.innerHeight;
+    var remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
 
-    $('.all-wrapper').css({
-        'background-image': 'none',
-        'margin': 'auto',
-        'height': windowHeight
-    });
-    $('.input-section').parent().css('padding', '0px');
-    $('.navigation_page').css('width', 'auto');
-    $('#boxQuestion').css('height', windowHeight - remainingHeight - 20);
-    $('#emo-section').css('height', windowHeight - remainingHeight - 22);
-    $('.slimScrollDiv, .emo-group-detail').css('height', windowHeight - remainingHeight - 32);
+    allWrapper.style.backgroundImage = 'none';
+    allWrapper.style.margin = 'auto';
+    allWrapper.style.height = windowHeight + 'px';
+    inputSection.parentNode.style.padding = '0px';
+    navigationPage.style.width = 'auto';
+    boxQuestion.style.height = windowHeight - remainingHeight + 2 + 'px';
+    emoGroupDetail.parentNode.parentNode.style.height = windowHeight - remainingHeight + 'px';
+    emoGroupDetail.parentNode.style.height =
+        emoGroupDetail.style.height = windowHeight - remainingHeight - 32 + 'px';
 
     // Alter existing elements.
-    $('.emo-group-detail').empty().append(getEmoticons(524, 574), getEmoticons(707), getEmoticons(200, 234));
+    emoGroupDetail.innerHTML = getEmoticons(524, 574) + getEmoticons(707) + getEmoticons(200, 234);
 
     // Add elements.
-    var myScript = document.createElement('script');
-    myScript.type = 'text/javascript';
-    myScript.innerHTML = 'function toggleEmoSlt(){$(".emo-group-title-wrapper").slideToggle();}';
-    $('.input-section-a').append(myScript, '<input type="button" value="Toggle" onclick="toggleEmoSlt()" />');
+    var btnToggle = document.createElement('input');
+    btnToggle.type = 'button';
+    btnToggle.value = 'Toggle';
+    btnToggle.onclick = toggleEmoSlt;
+    idQuestion.parentNode.insertBefore(btnToggle, null);
 
+    // Add event listeners
     // Firefox detection.
     if (typeof InstallTrigger !== 'undefined')
-        $(window).keypress(changeEmoGroup);
+        document.addEventListener('keypress', keyEvent);
     else
-        $(window).keydown(changeEmoGroup);
-
-    // Override functions.
-    $('a.btuEmotion').click(function() {
-        $('#idQuestion').get(0).value += $(this).attr('alt');
-        $('#idQuestion').focus();
-    });
+        document.addEventListener('keydown', keyEvent);
 
     // Custom functions.
+    function toggleEmoSlt() {
+        emoGroup.offsetParent ? emoGroup.parentNode.style.display = 'none' : emoGroup.parentNode.style.display = 'block';
+    }
+
     function getEmoticons(start, end) {
         var emos = '';
 
@@ -69,21 +84,46 @@ $(function() {
         return emos;
     }
 
-    function changeEmoGroup(e) {
+    function keyEvent(e) {
         switch (e.keyCode) {
             case 40:
-                $('#emogroup option:selected').next().prop('selected', true);
-                $('#emogroup').change();
+                if (emoGroup.selectedIndex !== emoGroup.length - 1)
+                    emoGroup.selectedIndex++;
+                changeEmoGroup();
                 break;
             case 38:
-                $('#emogroup option:selected').prev().prop('selected', true);
-                $('#emogroup').change();
+                if (emoGroup.selectedIndex !== 0)
+                    emoGroup.selectedIndex--;
+                changeEmoGroup();
                 break;
             default:
         }
     }
 
+    function changeEmoGroup() {
+        var request = new XMLHttpRequest();
+        request.open('POST', 'qa_smiley_ajax.php', true);
+        request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        request.onreadystatechange = function() {
+            if (request.readyState == 4 && request.status == 200) {
+                emoGroupDetail.innerHTML = JSON.parse(request.responseText).str;
+                addEmoGroupEvent();
+            }
+        };
+        request.send('group=' + emoGroup.value);
+    }
+
+    function addEmoGroupEvent() {
+        var emos = emoGroupDetail.childNodes;
+        for (i = 0, len = emos.length; i < len; i++)
+            emos[i].addEventListener('click', function(e) {
+                idQuestion.value += e.target.parentNode.getAttribute('alt');
+                idQuestion.focus();
+            });
+    }
+
     // Run at startup.
     toggleEmoSlt();
-    $('#idQuestion').focus();
-});
+    addEmoGroupEvent();
+    idQuestion.focus();
+})();
