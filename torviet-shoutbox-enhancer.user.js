@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.3
+// @version      0.5.4
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -90,7 +90,9 @@
             case 38:
                 emoGroup.selectedIndex !== 0 && emoGroup.selectedIndex--,
                     changeEmoGroup();
+                break;
             default:
+                idQuestion.focus();
         }
     }
 
