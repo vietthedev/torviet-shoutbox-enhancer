@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.4
+// @version      0.5.5
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -83,13 +83,21 @@
 
     function keyEvent(e) {
         switch (e.keyCode) {
+            // Down arrow.
             case 40:
                 emoGroup.selectedIndex !== emoGroup.length - 1 && emoGroup.selectedIndex++;
                 changeEmoGroup();
                 break;
+            // Up arrow.
             case 38:
                 emoGroup.selectedIndex !== 0 && emoGroup.selectedIndex--,
                     changeEmoGroup();
+                break;
+            // Ctrl.
+            case 17:
+                break;
+            // Ctrl + C.
+            case 17 && 67:
                 break;
             default:
                 idQuestion.focus();
