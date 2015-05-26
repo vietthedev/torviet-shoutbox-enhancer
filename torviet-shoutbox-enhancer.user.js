@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.6
+// @version      0.5.7
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -85,13 +85,13 @@
         switch (e.keyCode) {
             // Down arrow.
             case 40:
-                emoGroup.selectedIndex !== emoGroup.length - 1 && emoGroup.selectedIndex++;
+                (emoGroup.selectedIndex !== emoGroup.length - 1) && (emoGroup !== document.activeElement) && emoGroup.selectedIndex++;
                 changeEmoGroup();
                 break;
             // Up arrow.
             case 38:
-                emoGroup.selectedIndex !== 0 && emoGroup.selectedIndex--,
-                    changeEmoGroup();
+                (emoGroup.selectedIndex !== 0) && (emoGroup !== document.activeElement) && emoGroup.selectedIndex--;
+                changeEmoGroup();
                 break;
             // Ctrl.
             case 17:
@@ -105,11 +105,11 @@
 
     function changeEmoGroup() {
         var request = new XMLHttpRequest();
-        request.open('POST', 'qa_smiley_ajax.php', !0);
+        request.open('POST', 'qa_smiley_ajax.php', 0);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request.onreadystatechange = function() {
-            request.readyState == 4 && request.status == 200 && (emoGroupDetail.innerHTML = JSON.parse(request.responseText).str,
-                                                                 addEmoGroupEvent())
+            request.readyState == 4 && request.status == 200 &&
+                (emoGroupDetail.innerHTML = JSON.parse(request.responseText).str, addEmoGroupEvent())
         };
         request.send('group=' + emoGroup.value);
     }
