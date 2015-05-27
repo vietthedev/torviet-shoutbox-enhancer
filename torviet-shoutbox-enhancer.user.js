@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.7
+// @version      0.5.8
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -62,7 +62,7 @@
 
     // Custom functions.
     function toggleEmoSlt() {
-        emoGroup.offsetParent ? emoGroup.parentNode.style.display = 'none' : emoGroup.parentNode.style.display = 'block';
+        emoGroup.parentNode.style.display = emoGroup.offsetParent ? 'none' : 'block';
     }
 
     function getEmoticons(start, end) {
@@ -85,12 +85,12 @@
         switch (e.keyCode) {
             // Down arrow.
             case 40:
-                (emoGroup.selectedIndex !== emoGroup.length - 1) && (emoGroup !== document.activeElement) && emoGroup.selectedIndex++;
+                (emoGroup !== document.activeElement) && (emoGroup.selectedIndex !== emoGroup.length - 1) && emoGroup.selectedIndex++;
                 changeEmoGroup();
                 break;
             // Up arrow.
             case 38:
-                (emoGroup.selectedIndex !== 0) && (emoGroup !== document.activeElement) && emoGroup.selectedIndex--;
+                (emoGroup !== document.activeElement) && (emoGroup.selectedIndex !== 0) && emoGroup.selectedIndex--;
                 changeEmoGroup();
                 break;
             // Ctrl.
