@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.8
+// @version      0.5.9
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -24,7 +24,12 @@
         navigationPage = document.getElementsByClassName('navigation_page')[0],
         boxQuestion = document.getElementById('boxQuestion'),
         emoGroup = document.getElementById('emogroup'),
-        emoGroupDetail = document.getElementsByClassName('emo-group-detail')[0];
+        emoGroupDetail = document.getElementsByClassName('emo-group-detail')[0],
+        windowHeight,
+        remainingHeight,
+        btnToggle,
+        emos,
+        request;
 
     // Remove unneeded elements.
     boxHead.parentNode.removeChild(boxHead);
@@ -33,11 +38,10 @@
     clock.parentNode.removeChild(clock);
 
     // Alter existing element CSS.
-    var windowHeight = window.innerHeight;
-    var remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
+    windowHeight = window.innerHeight;
+    remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
 
-    allWrapper.style.background = 'none';
-    allWrapper.style.margin = 'auto';
+    allWrapper.setAttribute('style', 'background: none; margin: auto');
     allWrapper.style.height = windowHeight + 'px';
     inputSection.parentNode.style.padding = '0px';
     navigationPage.style.width = 'auto';
@@ -50,7 +54,7 @@
     emoGroupDetail.innerHTML = getEmoticons(524, 574) + getEmoticons(707) + getEmoticons(200, 234);
 
     // Add elements.
-    var btnToggle = document.createElement('input');
+    btnToggle = document.createElement('input');
     btnToggle.type = 'button';
     btnToggle.value = 'Toggle';
     btnToggle.onclick = toggleEmoSlt;
@@ -66,14 +70,12 @@
     }
 
     function getEmoticons(start, end) {
-        var emos = '';
-
         if (end === void 0)
             emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin:0px 0px 0px 0px;" class="btuEmotion" alt="[em' + start +
                 ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + start +
                 '.gif" alt=""></a></div>';
         else
-            for (i = start; i <= end; i++)
+            for (i = start, emos = ''; i <= end; i++)
                 emos += '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin:0px 0px 0px 0px;" class="btuEmotion" alt="[em' + i +
                     ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + i +
                     '.gif" alt=""></a></div>';
@@ -83,19 +85,19 @@
 
     function keyEvent(e) {
         switch (e.keyCode) {
-            // Down arrow.
+                // Down arrow.
             case 40:
                 (emoGroup !== document.activeElement) && (emoGroup.selectedIndex !== emoGroup.length - 1) && emoGroup.selectedIndex++;
                 changeEmoGroup();
                 break;
-            // Up arrow.
+                // Up arrow.
             case 38:
                 (emoGroup !== document.activeElement) && (emoGroup.selectedIndex !== 0) && emoGroup.selectedIndex--;
                 changeEmoGroup();
                 break;
-            // Ctrl.
+                // Ctrl.
             case 17:
-            // Ctrl + C.
+                // Ctrl + C.
             case 17 && 67:
                 break;
             default:
@@ -104,7 +106,7 @@
     }
 
     function changeEmoGroup() {
-        var request = new XMLHttpRequest();
+        request = new XMLHttpRequest();
         request.open('POST', 'qa_smiley_ajax.php', 0);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request.onreadystatechange = function() {
@@ -115,7 +117,7 @@
     }
 
     function addEmoGroupEvent() {
-        var emos = emoGroupDetail.childNodes;
+        emos = emoGroupDetail.childNodes;
         for (i = 0, len = emos.length; i < len; i++)
             emos[i].addEventListener('click', function(e) {
                 idQuestion.value += e.target.parentNode.getAttribute('alt');
