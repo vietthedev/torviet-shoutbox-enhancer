@@ -85,19 +85,19 @@
 
     function keyEvent(e) {
         switch (e.keyCode) {
-                // Down arrow.
+            // Down arrow.
             case 40:
                 (emoGroup !== document.activeElement) && (emoGroup.selectedIndex !== emoGroup.length - 1) && emoGroup.selectedIndex++;
                 changeEmoGroup();
                 break;
-                // Up arrow.
+            // Up arrow.
             case 38:
                 (emoGroup !== document.activeElement) && (emoGroup.selectedIndex !== 0) && emoGroup.selectedIndex--;
                 changeEmoGroup();
                 break;
-                // Ctrl.
+            // Ctrl.
             case 17:
-                // Ctrl + C.
+            // Ctrl + C.
             case 17 && 67:
                 break;
             default:
