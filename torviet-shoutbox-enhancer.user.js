@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.9
+// @version      0.5.10
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -27,9 +27,7 @@
         emoGroupDetail = document.getElementsByClassName('emo-group-detail')[0],
         windowHeight,
         remainingHeight,
-        btnToggle,
-        emos,
-        request;
+        btnToggle;
 
     // Remove unneeded elements.
     boxHead.parentNode.removeChild(boxHead);
@@ -41,8 +39,7 @@
     windowHeight = window.innerHeight;
     remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
 
-    allWrapper.setAttribute('style', 'background: none; margin: auto');
-    allWrapper.style.height = windowHeight + 'px';
+    allWrapper.setAttribute('style', 'background: none; margin: auto; height: ' + windowHeight + 'px');
     inputSection.parentNode.style.padding = '0px';
     navigationPage.style.width = 'auto';
     boxQuestion.style.height = windowHeight - remainingHeight + 2 + 'px';
@@ -70,12 +67,14 @@
     }
 
     function getEmoticons(start, end) {
+        var emos = '';
+        
         if (end === void 0)
             emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin:0px 0px 0px 0px;" class="btuEmotion" alt="[em' + start +
                 ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + start +
                 '.gif" alt=""></a></div>';
         else
-            for (i = start, emos = ''; i <= end; i++)
+            for (var i = start; i <= end; i++)
                 emos += '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin:0px 0px 0px 0px;" class="btuEmotion" alt="[em' + i +
                     ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + i +
                     '.gif" alt=""></a></div>';
@@ -106,7 +105,7 @@
     }
 
     function changeEmoGroup() {
-        request = new XMLHttpRequest();
+        var request = new XMLHttpRequest();
         request.open('POST', 'qa_smiley_ajax.php', 0);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request.onreadystatechange = function() {
@@ -117,8 +116,7 @@
     }
 
     function addEmoGroupEvent() {
-        emos = emoGroupDetail.childNodes;
-        for (i = 0, len = emos.length; i < len; i++)
+        for (var i = 0, emos = emoGroupDetail.childNodes, len = emos.length; i < len; i++)
             emos[i].addEventListener('click', function(e) {
                 idQuestion.value += e.target.parentNode.getAttribute('alt');
                 idQuestion.focus();
