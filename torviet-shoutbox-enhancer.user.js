@@ -70,12 +70,12 @@
         var emos = '';
         
         if (end === void 0)
-            emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin:0px 0px 0px 0px;" class="btuEmotion" alt="[em' + start +
+            emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin: 0;" class="btuEmotion" alt="[em' + start +
                 ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + start +
                 '.gif" alt=""></a></div>';
         else
             for (var i = start; i <= end; i++)
-                emos += '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin:0px 0px 0px 0px;" class="btuEmotion" alt="[em' + i +
+                emos += '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin: 0;" class="btuEmotion" alt="[em' + i +
                     ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + i +
                     '.gif" alt=""></a></div>';
 
