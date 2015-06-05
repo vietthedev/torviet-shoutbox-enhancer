@@ -65,7 +65,8 @@
      * Let's see if the user is using Firefox to add the required keymapping event.  *
      * This method is taken from http://stackoverflow.com/questions/9847580/         *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    typeof InstallTrigger !== 'undefined' ? document.addEventListener('keypress', keyEvent) : document.addEventListener('keydown', keyEvent);
+    typeof InstallTrigger !== 'undefined' ?
+        document.addEventListener('keypress', keyEvent) : document.addEventListener('keydown', keyEvent);
 
     // Here comes our own functions.
     function toggleEmoSlt() {
