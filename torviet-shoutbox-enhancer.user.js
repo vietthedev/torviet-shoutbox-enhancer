@@ -39,11 +39,12 @@
      * Here we get the window height of the current window size and the height *
      * without the input section and the div holding the navigation.           *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    var windowHeight = window.innerHeight,
-    remainingHeight  = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
+    var windowHeight    = window.innerHeight,
+        remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
 
     // Center the wrapper for readability. It's also time to use the defined heights.
-    allWrapper.style.cssText                          = 'background-image: none; margin: auto; height: ' + windowHeight + 'px';
+    allWrapper.style.cssText                          =
+        'background-image: none; margin: auto; height: ' + windowHeight + 'px';
     inputSection.parentNode.style.padding             = '0px';
     navigationPage.style.width                        = 'auto';
     boxQuestion.style.height                          = windowHeight - remainingHeight + 2 + 'px';
@@ -66,7 +67,8 @@
      * This method is taken from http://stackoverflow.com/questions/9847580/         *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     typeof InstallTrigger !== 'undefined' ?
-        document.addEventListener('keypress', keyEvent) : document.addEventListener('keydown', keyEvent);
+        document.addEventListener('keypress', keyEvent) :
+        document.addEventListener('keydown', keyEvent);
 
     // Here comes our own functions.
     function toggleEmoSlt() {
@@ -83,12 +85,14 @@
 
         // We won't use a loop if we need only one emoticon.
         if (end === void 0)
-            emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin: 0;" class="btuEmotion" alt="[em' + start +
+            emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">' +
+                '<a style="margin: 0;" class="btuEmotion" alt="[em' + start +
                 ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + start +
                 '.gif" alt=""></a></div>';
         else
             for (var i = start; i <= end; i++)
-                emos += '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;"><a style="margin: 0;" class="btuEmotion" alt="[em' + i +
+                emos += '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">' +
+                    '<a style="margin: 0;" class="btuEmotion" alt="[em' + i +
                     ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + i +
                     '.gif" alt=""></a></div>';
 
@@ -99,12 +103,16 @@
         switch (e.keyCode) {
                 // Down arrow.
             case 40:
-                (emoGroup !== document.activeElement) && (emoGroup.selectedIndex !== emoGroup.length - 1) && emoGroup.selectedIndex++;
+                emoGroup !== document.activeElement &&
+                    emoGroup.selectedIndex !== emoGroup.length - 1 &&
+                    emoGroup.selectedIndex++;
                 changeEmoGroup();
                 break;
                 // Up arrow.
             case 38:
-                (emoGroup !== document.activeElement) && (emoGroup.selectedIndex !== 0) && emoGroup.selectedIndex--;
+                emoGroup !== document.activeElement &&
+                    emoGroup.selectedIndex !== 0 &&
+                    emoGroup.selectedIndex--;
                 changeEmoGroup();
                 break;
                 // Ctrl.
@@ -122,7 +130,7 @@
         var request = new XMLHttpRequest();
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * Asynchronous request sometimes doesn't work properly so we'll make it synchronous.  *
-         * This process is fast enough so the user won't notice the unresponsive moment        *
+         * This process is fast enough so the user will hardly notice the unresponsive moment  *
          * while the browser is sending the request and receiving the response.                *
          * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
         request.open('POST', 'qa_smiley_ajax.php', 0);
