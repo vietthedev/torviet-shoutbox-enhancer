@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.11
+// @version      0.5.12
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -9,7 +9,9 @@
 // @description  A small script to tweak the shoutbox
 // @author       Salad
 // @match        http://torviet.com/qa.php*
-// @grant        none
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_addStyle
 // ==/UserScript==
 
 (function() {
@@ -18,11 +20,9 @@
         marquee        = document.getElementsByClassName('marquee')[0],
         sltTheme       = document.getElementById('sltTheme'),
         clock          = document.getElementById('clock'),
-        allWrapper     = document.getElementsByClassName('all-wrapper')[0],
         inputSection   = document.getElementsByClassName('input-section')[0],
         idQuestion     = document.getElementById('idQuestion'),
         navigationPage = document.getElementsByClassName('navigation_page')[0],
-        boxQuestion    = document.getElementById('boxQuestion'),
         emoGroup       = document.getElementById('emogroup'),
         emoGroupDetail = document.getElementsByClassName('emo-group-detail')[0];
 
@@ -33,7 +33,7 @@
     boxHead.parentNode.removeChild(boxHead);
     marquee.parentNode.removeChild(marquee);
     sltTheme.parentNode.removeChild(sltTheme);
-    clock.parentNode.removeChild(clock);
+    clock.innerHTML = '';
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Here we get the window height of the current window size and the height *
@@ -42,28 +42,41 @@
     var windowHeight    = window.innerHeight,
         remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
 
-    // Center the wrapper for readability. It's also time to use the defined heights.
-    allWrapper.style.cssText                          =
-        'background-image: none; margin: auto; height: ' + windowHeight + 'px';
-    inputSection.parentNode.style.padding             = '0px';
-    navigationPage.style.width                        = 'auto';
-    boxQuestion.style.height                          = windowHeight - remainingHeight + 2 + 'px';
-    emoGroupDetail.parentNode.parentNode.style.height =
-        emoGroupDetail.parentNode.style.height        =
-        emoGroupDetail.style.height                   = windowHeight - remainingHeight + 'px';
+    // And polish things with our custom CSS.
+    GM_addStyle(
+        '.all-wrapper {'                                                               +
+        '    background-image: none !important;'                                       +
+        '    height          : ' + windowHeight + 'px;'                                +
+        '    margin          : auto;'                                                  +
+        '}'                                                                            +
+        '.navigation_page {'                                                           +
+        '    width: auto;'                                                             +
+        '}'                                                                            +
+        '#boxQuestion {'                                                               +
+        '    height: ' + (windowHeight - remainingHeight) + 'px;'                      +
+        '}'                                                                            +
+        '.q-head {'                                                                    +
+        '    border-radius: 0;'                                                        +
+        '}'                                                                            +
+        '#clock {'                                                                     +
+        '    height    : 72px;'                                                        +
+        '    text-align: center;'                                                      +
+        '}'                                                                            +
+        '#emo-section, .slimScrollDiv, .emo-group-detail {'                            +
+        '    height : ' + (windowHeight - remainingHeight - 72 - 6) + 'px !important;' +
+        '    padding: 0 !important;'                                                   +
+        '}'
+    );
+
+    inputSection.parentNode.style.padding = '0';
 
     // Override the default emoticons with the frequently used ones.
     emoGroupDetail.innerHTML = getEmoticons(524, 574) + getEmoticons(707) + getEmoticons(200, 234);
 
-    // Add a button to show/hide the emoticon drop-down list.
-    var btnToggle     = document.createElement('input');
-    btnToggle.type    = 'button';
-    btnToggle.value   = 'Toggle';
-    btnToggle.onclick = toggleEmoSlt;
-    idQuestion.parentNode.appendChild(btnToggle);
+    clock.appendChild(emoGroup.parentNode);
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Let's see if the user is using Firefox to add the required keymapping event.  *
+     * Let's see if the user is using Firefox to add the required key mapping event.  *
      * This method is taken from http://stackoverflow.com/questions/9847580/         *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     typeof InstallTrigger !== 'undefined' ?
@@ -71,20 +84,11 @@
         document.addEventListener('keydown', keyEvent);
 
     // Here comes our own functions.
-    function toggleEmoSlt() {
-        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-         * Found this useful method while I was searching for a way to check *
-         * whether an element is visible:                                    *
-         * http://stackoverflow.com/questions/19669786/                      *
-         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-        emoGroup.parentNode.style.display = emoGroup.offsetParent ? 'none' : 'block';
-    }
-
     function getEmoticons(start, end) {
         var emos = '';
 
         // We won't use a loop if we need only one emoticon.
-        if (end === void 0)
+        if (!end)
             emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">' +
                 '<a style="margin: 0;" class="btuEmotion" alt="[em' + start +
                 ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + start +
@@ -133,7 +137,7 @@
          * This process is fast enough so the user will hardly notice the unresponsive moment  *
          * while the browser is sending the request and receiving the response.                *
          * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-        request.open('POST', 'qa_smiley_ajax.php', 0);
+        request.open('POST', 'qa_smiley_ajax.php', false);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request.onreadystatechange = function() {
             request.readyState == 4 && request.status == 200 &&
@@ -152,7 +156,6 @@
     }
 
     // The following should run at startup.
-    toggleEmoSlt();
     addEmoGroupEvent();
     idQuestion.focus();
 })();
