@@ -68,7 +68,7 @@
         '}'
     );
 
-    inputSection.parentNode.style.padding = '0';
+    inputSection.parentNode.style.padding = '0px';
 
     // Override the default emoticons with the frequently used ones.
     emoGroupDetail.innerHTML = getEmoticons(524, 574) + getEmoticons(707) + getEmoticons(200, 234);
