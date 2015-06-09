@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.5.12
+// @version      0.6
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -11,6 +11,7 @@
 // @match        http://torviet.com/qa.php*
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @grant        GM_deleteValue
 // @grant        GM_addStyle
 // ==/UserScript==
 
@@ -25,6 +26,112 @@
         navigationPage = document.getElementsByClassName('navigation_page')[0],
         emoGroup       = document.getElementById('emogroup'),
         emoGroupDetail = document.getElementsByClassName('emo-group-detail')[0];
+
+    // Also create a namespace.
+    var EMOTICON = (function() {
+        var emoList = GM_getValue('emoList'),
+            emoHtml = '';
+
+        var promptForEmoList = function(action) {
+            var message = 'Chọn bộ emoticon bạn muốn' + ' ' + action + ':\n',
+                answer;
+
+            for (var i = 0, options = emoGroup.options, len = options.length; i < len; i++) {
+                message += i + 1 + '. ' + options[i].value + '\n';
+            }
+            message += 'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường.' + ' ' +
+                'Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
+
+            do {
+                answer = prompt(message);
+            }
+            while (!answer || answer.trim() === '');
+
+            return answer.split(',');
+        };
+        var initemoList = function() {
+            emoList = promptForEmoList('sử dụng');
+            GM_setValue('emoList', emoList);
+        };
+        var requestEmoticons = function(groupName) {
+            var request = new XMLHttpRequest();
+            /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+             * Using synchronous request here is the simplest implementation to make it work.      *
+             * This process is fast enough so the user will hardly notice the unresponsive moment  *
+             * while the browser is sending the request and receiving the response.                *
+             * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+            request.open('POST', 'qa_smiley_ajax.php', false);
+            request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            request.onreadystatechange = function() {
+                request.readyState == 4 && request.status == 200 &&
+                    (emoHtml = JSON.parse(request.responseText).str);
+            };
+            request.send('group=' + groupName);
+        };
+        var makeEmoticonHtml = function(emoName) {
+            emoHtml = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">' +
+                '<a style="margin: 0;" class="btuEmotion" alt="[em' + emoName                            +
+                ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + emoName         +
+                '.gif" alt=""></a></div>';   
+        };
+
+        return {
+            checkemoList: function() {
+                !emoList && initemoList();
+            },
+            add: function() {
+                var newEmoList = promptForEmoList('thêm');
+                for (var i = 0, len = newEmoList.length; i < len; i++) {
+                    if (emoList.indexOf(newEmoList[i]) === -1) {
+                        emoList.push(newEmoList[i]);
+                    }
+                }
+                GM_setValue('emoList', emoList);
+                location.href = 'qa.php';
+            },
+            remove: function() {
+                var emoListToRemove = promptForEmoList('xóa');
+                for (var i = 0, len = emoListToRemove.length; i < len; i++) {
+                    var index = emoList.indexOf(emoListToRemove[i]);
+                    if (index > -1) {
+                        emoList.splice(index, 1);
+                    }
+                }
+                GM_setValue('emoList', emoList);
+                location.href = 'qa.php';
+            },
+            clear: function() {
+                GM_deleteValue('emoList');
+                location.href = 'qa.php';
+            },
+            getEmoticons: function(groupName) {
+                requestEmoticons(groupName);
+                return emoHtml;
+            },
+            generateEmoticons: function(emoName) {
+                makeEmoticonHtml(emoName);
+                return emoHtml;
+            },
+            addEmosToEmoGroup: function() {
+                emoGroupDetail.innerHTML = '';
+                for (var i = 0, len = emoList.length; i < len; i++) {
+                    if (isNaN(emoList[i])) {
+                        emoGroupDetail.innerHTML += this.getEmoticons(emoList[i]);
+                    } else {
+                        emoGroupDetail.innerHTML += this.generateEmoticons(emoList[i]);
+                    }
+                }
+            },
+            addEmoGroupEvent: function() {
+                // Let's add click events for the newly added emoticons.
+                for (var i = 0, emos = emoGroupDetail.childNodes, len = emos.length; i < len; i++)
+                    emos[i].addEventListener('click', function(e) {
+                        idQuestion.value += e.target.parentNode.getAttribute('alt');
+                        idQuestion.focus();
+                    });
+            }
+        };
+    })();
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Now remove the unnecessary elements including the box containing new torrents *
@@ -49,6 +156,9 @@
         '    height          : ' + windowHeight + 'px;'                                +
         '    margin          : auto;'                                                  +
         '}'                                                                            +
+        '.all-wrapper > :nth-child(2) {'                                               +
+        '    padding: 0 !important;'                                                   +
+        '}'                                                                            +
         '.navigation_page {'                                                           +
         '    width: auto;'                                                             +
         '}'                                                                            +
@@ -68,39 +178,45 @@
         '}'
     );
 
-    inputSection.parentNode.style.padding = '0px';
+    var toBeAppendedToClock = document.createDocumentFragment(),
+        someText            = document.createElement('span'),
+        btnAdd              = document.createElement('input'),
+        btnRemove           = document.createElement('input'),
+        btnClear            = document.createElement('input');
 
-    // Override the default emoticons with the frequently used ones.
-    emoGroupDetail.innerHTML = getEmoticons(524, 574) + getEmoticons(707) + getEmoticons(200, 234);
+    someText.innerHTML = 'For custom emoticon group<br />';
 
-    clock.appendChild(emoGroup.parentNode);
+    btnAdd.type  = 'button';
+    btnAdd.value = 'Add';
+    btnAdd.addEventListener('click', EMOTICON.add);
+
+    btnRemove.type  = 'button';
+    btnRemove.value = 'Remove';
+    btnRemove.addEventListener('click', EMOTICON.remove);
+
+    btnClear.type  = 'button';
+    btnClear.value = 'Clear';
+    btnClear.addEventListener('click', EMOTICON.clear);
+
+    toBeAppendedToClock.appendChild(emoGroup.parentNode);
+    toBeAppendedToClock.appendChild(someText);
+    toBeAppendedToClock.appendChild(btnAdd);
+    toBeAppendedToClock.appendChild(btnRemove);
+    toBeAppendedToClock.appendChild(btnClear);
+    clock.appendChild(toBeAppendedToClock);
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Let's see if the user is using Firefox to add the required key mapping event.  *
+     * Let's see if the user is using Firefox to add the required key mapping event. *
      * This method is taken from http://stackoverflow.com/questions/9847580/         *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    typeof InstallTrigger !== 'undefined' ?
-        document.addEventListener('keypress', keyEvent) :
-        document.addEventListener('keydown', keyEvent);
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+    isFirefox ? document.addEventListener('keypress', keyEvent) :
+    document.addEventListener('keydown', keyEvent);
 
     // Here comes our own functions.
-    function getEmoticons(start, end) {
-        var emos = '';
-
-        // We won't use a loop if we need only one emoticon.
-        if (!end)
-            emos = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">' +
-                '<a style="margin: 0;" class="btuEmotion" alt="[em' + start +
-                ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + start +
-                '.gif" alt=""></a></div>';
-        else
-            for (var i = start; i <= end; i++)
-                emos += '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">' +
-                    '<a style="margin: 0;" class="btuEmotion" alt="[em' + i +
-                    ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + i +
-                    '.gif" alt=""></a></div>';
-
-        return emos;
+    function changeEmoGroup() {
+        emoGroupDetail.innerHTML = EMOTICON.getEmoticons(emoGroup.value);
+        EMOTICON.addEmoGroupEvent();
     }
 
     function keyEvent(e) {
@@ -119,43 +235,13 @@
                     emoGroup.selectedIndex--;
                 changeEmoGroup();
                 break;
-                // Ctrl.
-            case 17:
-                // Ctrl + C.
-            case 17 && 67:
-                break;
             default:
-                idQuestion.focus();
         }
     }
 
-    function changeEmoGroup() {
-        // Native JavaScript method to send an AJAX request.
-        var request = new XMLHttpRequest();
-        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-         * Asynchronous request sometimes doesn't work properly so we'll make it synchronous.  *
-         * This process is fast enough so the user will hardly notice the unresponsive moment  *
-         * while the browser is sending the request and receiving the response.                *
-         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-        request.open('POST', 'qa_smiley_ajax.php', false);
-        request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        request.onreadystatechange = function() {
-            request.readyState == 4 && request.status == 200 &&
-                (emoGroupDetail.innerHTML = JSON.parse(request.responseText).str, addEmoGroupEvent())
-        };
-        request.send('group=' + emoGroup.value);
-    }
-
-    function addEmoGroupEvent() {
-        // Let's add click events for the newly added emoticons.
-        for (var i = 0, emos = emoGroupDetail.childNodes, len = emos.length; i < len; i++)
-            emos[i].addEventListener('click', function(e) {
-                idQuestion.value += e.target.parentNode.getAttribute('alt');
-                idQuestion.focus();
-            });
-    }
-
     // The following should run at startup.
-    addEmoGroupEvent();
+    EMOTICON.checkemoList();
+    EMOTICON.addEmosToEmoGroup();
+    !isFirefox && EMOTICON.addEmoGroupEvent();
     idQuestion.focus();
 })();
