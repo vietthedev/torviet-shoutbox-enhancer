@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.6
+// @version      0.6.1
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -32,12 +32,18 @@
         var emoList = GM_getValue('emoList'),
             emoHtml = '';
 
-        var promptForEmoList = function(action) {
+        var promptForEmoList = function(action, list) {
             var message = 'Chọn bộ emoticon bạn muốn' + ' ' + action + ':\n',
                 answer;
 
-            for (var i = 0, options = emoGroup.options, len = options.length; i < len; i++) {
-                message += i + 1 + '. ' + options[i].value + '\n';
+            if (list.constructor === Array) {
+                for (var i = 0, len = list.length; i < len; i++) {
+                    message += i + 1 + '. ' + list[i] + '\n';
+                }
+            } else {
+                for (var i = 0, len = list.length; i < len; i++) {
+                    message += i + 1 + '. ' + list[i].text + '\n';
+                }
             }
             message += 'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường.' + ' ' +
                 'Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
@@ -47,7 +53,7 @@
             }
             while (!answer || answer.trim() === '');
 
-            return answer.split(',');
+            return answer.replace(/\s+/g, '').split(',');
         };
         var initemoList = function() {
             emoList = promptForEmoList('sử dụng');
@@ -80,7 +86,7 @@
                 !emoList && initemoList();
             },
             add: function() {
-                var newEmoList = promptForEmoList('thêm');
+                var newEmoList = promptForEmoList('thêm', emoGroup.options);
                 for (var i = 0, len = newEmoList.length; i < len; i++) {
                     if (emoList.indexOf(newEmoList[i]) === -1) {
                         emoList.push(newEmoList[i]);
@@ -90,7 +96,7 @@
                 location.href = 'qa.php';
             },
             remove: function() {
-                var emoListToRemove = promptForEmoList('xóa');
+                var emoListToRemove = promptForEmoList('xóa', emoList);
                 for (var i = 0, len = emoListToRemove.length; i < len; i++) {
                     var index = emoList.indexOf(emoListToRemove[i]);
                     if (index > -1) {
@@ -115,11 +121,9 @@
             addEmosToEmoGroup: function() {
                 emoGroupDetail.innerHTML = '';
                 for (var i = 0, len = emoList.length; i < len; i++) {
-                    if (isNaN(emoList[i])) {
-                        emoGroupDetail.innerHTML += this.getEmoticons(emoList[i]);
-                    } else {
-                        emoGroupDetail.innerHTML += this.generateEmoticons(emoList[i]);
-                    }
+                    emoGroupDetail.innerHTML += isNaN(emoList[i]) ?
+                        this.getEmoticons(emoList[i]) :
+                    this.generateEmoticons(emoList[i]);
                 }
             },
             addEmoGroupEvent: function() {
