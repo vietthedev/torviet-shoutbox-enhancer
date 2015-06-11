@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.6.1
+// @version      0.6.2
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -36,14 +36,8 @@
             var message = 'Chọn bộ emoticon bạn muốn' + ' ' + action + ':\n',
                 answer;
 
-            if (list.constructor === Array) {
-                for (var i = 0, len = list.length; i < len; i++) {
-                    message += i + 1 + '. ' + list[i] + '\n';
-                }
-            } else {
-                for (var i = 0, len = list.length; i < len; i++) {
-                    message += i + 1 + '. ' + list[i].text + '\n';
-                }
+            for (var i = 0, len = list.length; i < len; i++) {
+                message += i + 1 + '. ' + list[i] + '\n';
             }
             message += 'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường.' + ' ' +
                 'Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
@@ -86,12 +80,18 @@
                 !emoList && initemoList();
             },
             add: function() {
-                var newEmoList = promptForEmoList('thêm', emoGroup.options);
-                for (var i = 0, len = newEmoList.length; i < len; i++) {
-                    if (emoList.indexOf(newEmoList[i]) === -1) {
-                        emoList.push(newEmoList[i]);
-                    }
+                var emoGroupRemain = [];
+                for (var i = 0, options = emoGroup.options, len = options.length; i < len; i++) {
+                    (emoList.indexOf(options[i].text) === -1) &&
+                        emoGroupRemain.push(options[i].text);
                 }
+
+                var emoListToAdd = promptForEmoList('thêm', emoGroupRemain);
+                for (var i = 0, len = emoListToAdd.length; i < len; i++) {
+                    (emoList.indexOf(emoListToAdd[i]) === -1) &&
+                        emoList.push(emoListToAdd[i]);
+                }
+
                 GM_setValue('emoList', emoList);
                 location.href = 'qa.php';
             },
@@ -99,10 +99,9 @@
                 var emoListToRemove = promptForEmoList('xóa', emoList);
                 for (var i = 0, len = emoListToRemove.length; i < len; i++) {
                     var index = emoList.indexOf(emoListToRemove[i]);
-                    if (index > -1) {
-                        emoList.splice(index, 1);
-                    }
+                    (index > -1) && emoList.splice(index, 1);
                 }
+
                 GM_setValue('emoList', emoList);
                 location.href = 'qa.php';
             },
