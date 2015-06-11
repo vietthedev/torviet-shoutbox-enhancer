@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.6.2
+// @version      0.6.3
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -36,8 +36,14 @@
             var message = 'Chọn bộ emoticon bạn muốn' + ' ' + action + ':\n',
                 answer;
 
-            for (var i = 0, len = list.length; i < len; i++) {
-                message += i + 1 + '. ' + list[i] + '\n';
+            if (list.constructor === Array) {
+                for (var i = 0, len = list.length; i < len; i++) {
+                    message += i + 1 + '. ' + list[i] + '\n';
+                }
+            } else {
+                for (var i = 0, len = list.length; i < len; i++) {
+                    message += i + 1 + '. ' + list[i].text + '\n';
+                }
             }
             message += 'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường.' + ' ' +
                 'Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
@@ -50,7 +56,7 @@
             return answer.replace(/\s+/g, '').split(',');
         };
         var initemoList = function() {
-            emoList = promptForEmoList('sử dụng');
+            emoList = promptForEmoList('sử dụng', emoGroup.options);
             GM_setValue('emoList', emoList);
         };
         var requestEmoticons = function(groupName) {
