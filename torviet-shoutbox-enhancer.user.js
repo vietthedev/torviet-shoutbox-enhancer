@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.6.3
+// @version      0.6.4
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -134,7 +134,7 @@
             addEmoGroupEvent: function() {
                 // Let's add click events for the newly added emoticons.
                 for (var i = 0, emos = emoGroupDetail.childNodes, len = emos.length; i < len; i++)
-                    emos[i].addEventListener('click', function(e) {
+                    emos[i].firstChild.addEventListener('click', function(e) {
                         idQuestion.value += e.target.parentNode.getAttribute('alt');
                         idQuestion.focus();
                     });
