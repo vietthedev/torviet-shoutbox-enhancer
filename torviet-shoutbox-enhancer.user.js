@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.7.0
+// @version      0.7.1
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -236,11 +236,12 @@
                     emoGroup.selectedIndex--;
                 changeEmoGroup();
                 break;
+                // Enter.
             case 13:
                 var inputText = idQuestion.value;
                 inputText = inputText.replace(/(:\^\))|(\/:\))/g, '[em528]');
                 inputText = inputText.replace(/:\)/g, '[em564]');
-                inputText = inputText.replace(/:\({2}/g, '[em227]');
+                inputText = inputText.replace(/:\({2}/g, '[em7]');
                 inputText = inputText.replace(/:\(/g, '[em561]');
                 inputText = inputText.replace(/:x/g, '[em535]');
                 inputText = inputText.replace(/:"\>/g, '[em23]');
@@ -262,6 +263,7 @@
                 inputText = inputText.replace(/\[\-\(/g, '[em200]');
                 inputText = inputText.replace(/=[pP]~/g, '[em566]');
                 inputText = inputText.replace(/[tT]_[tT]/g, '[em544]');
+                inputText = inputText.replace(/\-_\-/g, '[em136]');
                 idQuestion.value = inputText;
                 break;
             default:
