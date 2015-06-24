@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.7.2
+// @version      0.7.3
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -251,9 +251,9 @@
                 inputText = inputText.replace(/[xX]\-?\(/g, '[em541]');
                 inputText = inputText.replace(/[bB]\-\)/g, '[em555]');
                 inputText = inputText.replace(/\>:\)/g, '[em552]');
+                inputText = inputText.replace(/\(:\|/g, '[em571]');
                 inputText = inputText.replace(/:\|/g, '[em206]');
                 inputText = inputText.replace(/:\-&/g, '[em37]');
-                inputText = inputText.replace(/\(:\|/g, '[em571]');
                 inputText = inputText.replace(/:\-?\?/g, '[em223]');
                 inputText = inputText.replace(/=\)\)/g, '[em707]');
                 inputText = inputText.replace(/:\-?[dD]/g, '[em536]');
