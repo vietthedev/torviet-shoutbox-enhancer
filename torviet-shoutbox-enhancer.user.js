@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.7.1
+// @version      0.7.2
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -36,15 +36,10 @@
             var message = 'Chọn bộ emoticon bạn muốn' + ' ' + action + ':\n',
                 answer;
 
-            if (list.constructor === Array) {
-                for (var i = 0, len = list.length; i < len; i++) {
-                    message += i + 1 + '. ' + list[i] + '\n';
-                }
-            } else {
-                for (var i = 0, len = list.length; i < len; i++) {
-                    message += i + 1 + '. ' + list[i].text + '\n';
-                }
+            for (var i = 0, len = list.length; i < len; i++) {
+                message += i + 1 + '. ' + list[i] + '\n';
             }
+
             message += 'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường.' + ' ' +
                 'Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
 
@@ -56,7 +51,12 @@
             return answer.replace(/\s+/g, '').split(',');
         };
         var initemoList = function() {
-            emoList = promptForEmoList('sử dụng', emoGroup.options);
+            var emoListAvailable = [];
+            for (var i = 0, options = emoGroup.options, len = options.length; i < len; i++) {
+                emoListAvailable.push(options[i].text);
+            }
+
+            emoList = promptForEmoList('sử dụng', emoListAvailable);
             GM_setValue('emoList', emoList);
         };
         var requestEmoticons = function(groupName) {
@@ -86,13 +86,13 @@
                 !emoList && initemoList();
             },
             add: function() {
-                var emoGroupRemain = [];
+                var emoListAvailable = [];
                 for (var i = 0, options = emoGroup.options, len = options.length; i < len; i++) {
                     (emoList.indexOf(options[i].text) === -1) &&
-                        emoGroupRemain.push(options[i].text);
+                        emoListAvailable.push(options[i].text);
                 }
 
-                var emoListToAdd = promptForEmoList('thêm', emoGroupRemain);
+                var emoListToAdd = promptForEmoList('thêm', emoListAvailable);
                 for (var i = 0, len = emoListToAdd.length; i < len; i++) {
                     (emoList.indexOf(emoListToAdd[i]) === -1) &&
                         emoList.push(emoListToAdd[i]);
