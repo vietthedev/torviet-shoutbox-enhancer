@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.6.4
+// @version      0.7.0
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -214,14 +214,6 @@
     toBeAppendedToClock.appendChild(btnClear);
     clock.appendChild(toBeAppendedToClock);
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Let's see if the user is using Firefox to add the required key mapping event. *
-     * This method is taken from http://stackoverflow.com/questions/9847580/         *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    var isFirefox = typeof InstallTrigger !== 'undefined';
-    isFirefox ? document.addEventListener('keypress', keyEvent) :
-    document.addEventListener('keydown', keyEvent);
-
     // Here comes our own functions.
     function changeEmoGroup() {
         emoGroupDetail.innerHTML = EMOTICON.getEmoticons(emoGroup.value);
@@ -244,13 +236,46 @@
                     emoGroup.selectedIndex--;
                 changeEmoGroup();
                 break;
+            case 13:
+                var inputText = idQuestion.value;
+                inputText = inputText.replace(/(:\^\))|(\/:\))/g, '[em528]');
+                inputText = inputText.replace(/:\)/g, '[em564]');
+                inputText = inputText.replace(/:\({2}/g, '[em227]');
+                inputText = inputText.replace(/:\(/g, '[em561]');
+                inputText = inputText.replace(/:x/g, '[em535]');
+                inputText = inputText.replace(/:"\>/g, '[em23]');
+                inputText = inputText.replace(/:\-?\*/g, '[em570]');
+                inputText = inputText.replace(/=\(\(/g, '[em572]');
+                inputText = inputText.replace(/:\-?[oO]/g, '[em222]');
+                inputText = inputText.replace(/[xX]\-?\(/g, '[em541]');
+                inputText = inputText.replace(/[bB]\-\)/g, '[em555]');
+                inputText = inputText.replace(/\>:\)/g, '[em552]');
+                inputText = inputText.replace(/:\|/g, '[em206]');
+                inputText = inputText.replace(/:\-&/g, '[em37]');
+                inputText = inputText.replace(/\(:\|/g, '[em571]');
+                inputText = inputText.replace(/:\-?\?/g, '[em223]');
+                inputText = inputText.replace(/=\)\)/g, '[em707]');
+                inputText = inputText.replace(/:\-?[dD]/g, '[em536]');
+                inputText = inputText.replace(/;;\)/g, '[em524]');
+                inputText = inputText.replace(/:\-?\>/g, '[em537]');
+                inputText = inputText.replace(/:\-[sS]/g, '[em558]');
+                inputText = inputText.replace(/\[\-\(/g, '[em200]');
+                inputText = inputText.replace(/=[pP]~/g, '[em566]');
+                inputText = inputText.replace(/[tT]_[tT]/g, '[em544]');
+                idQuestion.value = inputText;
+                break;
             default:
         }
     }
 
     // The following should run at startup.
+    document.addEventListener('keydown', keyEvent);
     EMOTICON.checkemoList();
     EMOTICON.addEmosToEmoGroup();
-    !isFirefox && EMOTICON.addEmoGroupEvent();
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Let's see if the user is using Firefox.                                       *
+     * This method is taken from http://stackoverflow.com/questions/9847580/         *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    typeof InstallTrigger === 'undefined' && EMOTICON.addEmoGroupEvent();
     idQuestion.focus();
 })();
