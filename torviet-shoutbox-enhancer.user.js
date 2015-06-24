@@ -262,6 +262,7 @@
                 inputText = inputText.replace(/:\-[sS]/g, '[em558]');
                 inputText = inputText.replace(/\[\-\(/g, '[em200]');
                 inputText = inputText.replace(/=[pP]~/g, '[em566]');
+                inputText = inputText.replace(/;\)\)/g, '[em18]');
                 inputText = inputText.replace(/[tT]_[tT]/g, '[em544]');
                 inputText = inputText.replace(/\-_\-/g, '[em136]');
                 idQuestion.value = inputText;
