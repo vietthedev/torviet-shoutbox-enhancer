@@ -167,7 +167,7 @@
         '.all-wrapper {'                                                               +
         '    background-image: none !important;'                                       +
         '    height          : ' + windowHeight + 'px;'                                +
-        '    margin          : auto;'                                                  +
+        '    margin          : 0 auto;'                                                +
         '}'                                                                            +
         '.all-wrapper > :nth-child(2) {'                                               +
         '    padding: 0 !important;'                                                   +
