@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.7.5
+// @version      0.8.0
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -29,8 +29,9 @@
 
     // Also create a namespace.
     var EMOTICON = (function() {
-        var emoList = GM_getValue('emoList'),
-            emoHtml = '';
+        var emoList     = GM_getValue('emoList'),
+            emoListHtml = GM_getValue('emoListHtml') || '',
+            emoHtml     = '';
 
         var promptForEmoList = function(action, list) {
             var message = 'Chọn bộ emoticon bạn muốn' + ' ' + action + ':\n',
@@ -99,6 +100,7 @@
                 }
 
                 GM_setValue('emoList', emoList);
+                GM_deleteValue('emoListHtml');
                 location.href = 'qa.php';
             },
             remove: function() {
@@ -109,10 +111,12 @@
                 }
 
                 GM_setValue('emoList', emoList);
+                GM_deleteValue('emoListHtml');
                 location.href = 'qa.php';
             },
             clear: function() {
                 GM_deleteValue('emoList');
+                GM_deleteValue('emoListHtml');
                 location.href = 'qa.php';
             },
             getEmoticons: function(groupName) {
@@ -129,11 +133,18 @@
             },
             addEmosToEmoGroup: function() {
                 emoGroupDetail.innerHTML = '';
-                for (var i = 0, len = emoList.length; i < len; i++) {
-                    emoGroupDetail.innerHTML += isNaN(emoList[i]) ?
-                        this.getEmoticons(emoList[i]) :
-                    this.generateEmoticons(emoList[i]);
+
+                if (emoListHtml === '') {
+                    for (var i = 0, len = emoList.length; i < len; i++) {
+                        emoListHtml += isNaN(emoList[i]) ?
+                            this.getEmoticons(emoList[i]) :
+                        this.generateEmoticons(emoList[i]);
+                    }
+
+                    GM_setValue('emoListHtml', emoListHtml);
                 }
+
+                emoGroupDetail.innerHTML = emoListHtml;
             },
             addEmoGroupEvent: function() {
                 // Let's add click events for the newly added emoticons.
