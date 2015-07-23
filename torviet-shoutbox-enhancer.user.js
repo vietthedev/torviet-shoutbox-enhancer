@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.0
+// @version      0.8.1
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -146,14 +146,14 @@
 
                 emoGroupDetail.innerHTML = emoListHtml;
             },
-            addEmoGroupEvent: function() {
-                // Let's add click events for the newly added emoticons.
-                for (var i = 0, emos = emoGroupDetail.childNodes, len = emos.length; i < len; i++)
-                    emos[i].firstChild.addEventListener('click', function(e) {
-                        idQuestion.value += e.target.parentNode.getAttribute('alt');
-                        idQuestion.focus();
-                    });
-            }
+            //addEmoGroupEvent: function() {
+            //    // Let's add click events for the newly added emoticons.
+            //    for (var i = 0, emos = emoGroupDetail.childNodes, len = emos.length; i < len; i++)
+            //        emos[i].firstChild.addEventListener('click', function(e) {
+            //            idQuestion.value += e.target.parentNode.getAttribute('alt');
+            //            idQuestion.focus();
+            //        });
+            //}
         };
     })();
 
@@ -291,10 +291,5 @@
     document.addEventListener('keydown', keyEvent);
     EMOTICON.checkemoList();
     EMOTICON.addEmosToEmoGroup();
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Let's see if the user is using Firefox.                                       *
-     * This method is taken from http://stackoverflow.com/questions/9847580/         *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    typeof InstallTrigger === 'undefined' && EMOTICON.addEmoGroupEvent();
     idQuestion.focus();
 })();
