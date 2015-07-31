@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.2
+// @version      0.8.3
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -164,7 +164,9 @@
     boxHead.parentNode.removeChild(boxHead);
     marquee.parentNode.removeChild(marquee);
     sltTheme.parentNode.removeChild(sltTheme);
-    clock.innerHTML = '';
+    while (clock.lastChild) {
+        clock.removeChild(clock.lastChild);
+    }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Here we get the window height of the current window size and the height *
