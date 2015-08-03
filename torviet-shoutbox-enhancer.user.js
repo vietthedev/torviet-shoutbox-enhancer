@@ -293,5 +293,10 @@
     document.addEventListener('keydown', keyEvent);
     EMOTICON.checkemoList();
     EMOTICON.addEmosToEmoGroup();
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Let's see if the user is using Firefox.                                       *
+     * This method is taken from http://stackoverflow.com/questions/9847580/         *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    typeof InstallTrigger === 'undefined' && EMOTICON.addEmoGroupEvent();
     idQuestion.focus();
 })();
