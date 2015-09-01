@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.4
+// @version      0.8.5
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -49,7 +49,7 @@
             }
             while (!answer || answer.trim() === '');
 
-            return answer.replace(/\s+/g, '').split(',');
+            return answer.replace(/\s{2,}/g, ' ').trim().split(',');
         };
         var initemoList = function() {
             var emoListAvailable = [];
