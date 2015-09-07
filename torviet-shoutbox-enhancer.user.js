@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.6
+// @version      0.8.7
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -231,7 +231,7 @@
     // Here comes our own functions.
     function changeEmoGroup() {
         emoGroupDetail.innerHTML = EMOTICON.getEmoticons(emoGroup.value);
-        EMOTICON.addEmoGroupEvent();
+        // EMOTICON.addEmoGroupEvent();
     }
 
     function keyEvent(e) {
@@ -294,6 +294,6 @@
      * Let's see if the user is using Firefox.                                       *
      * This method is taken from http://stackoverflow.com/questions/9847580/         *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    typeof InstallTrigger === 'undefined' && EMOTICON.addEmoGroupEvent();
+    // typeof InstallTrigger === 'undefined' && EMOTICON.addEmoGroupEvent();
     idQuestion.focus();
 })();
