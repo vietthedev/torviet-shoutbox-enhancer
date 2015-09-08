@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.7
+// @version      0.8.8
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -76,10 +76,9 @@
             request.send('group=' + groupName);
         };
         var makeEmoticonHtml = function(emoName) {
-            emoHtml = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">' +
-                '<a style="margin: 0;" class="btuEmotion" alt="[em' + emoName                            +
-                ']"><img style="max-width: 43px; max-height: 43px" src="/pic/smilies/' + emoName         +
-                '.gif" alt=""></a></div>';   
+            emoHtml = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">'        +
+                '<img style="max-width: 43px; max-height: 43px; cursor: pointer;" src="/pic/smilies/' + emoName +
+                '.gif" alt="[em' + emoName + ']"></div>';   
         };
 
         return {
