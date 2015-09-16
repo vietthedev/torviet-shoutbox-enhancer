@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.8
+// @version      0.8.9
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -172,31 +172,19 @@
      * without the input section and the div holding the navigation.           *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     var windowHeight    = window.innerHeight,
-        remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight - 100;
+        remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight;
 
     // And polish things with our custom CSS.
     GM_addStyle(
-        '.all-wrapper {'                                                               +
-        '    background-image: none !important;'                                       +
-        '    height          : ' + windowHeight + 'px;'                                +
-        '    margin          : 0 auto;'                                                +
-        '}'                                                                            +
-        '.all-wrapper > :nth-child(2) {'                                               +
-        '    padding: 0 !important;'                                                   +
-        '}'                                                                            +
-        '.navigation_page {'                                                           +
-        '    width: auto;'                                                             +
-        '}'                                                                            +
-        '#boxQuestion {'                                                               +
-        '    height: ' + (windowHeight - remainingHeight) + 'px;'                      +
-        '}'                                                                            +
-        '#clock {'                                                                     +
-        '    height    : 72px;'                                                        +
-        '    text-align: center;'                                                      +
-        '}'                                                                            +
-        '#emo-section, .slimScrollDiv, .emo-group-detail {'                            +
-        '    height : ' + (windowHeight - remainingHeight - 72 - 6) + 'px !important;' +
-        '    padding: 0 !important;'                                                   +
+        '.all-wrapper {'                                                                +
+        '    background-image: none !important;'                                        +
+        '    height          : ' + (windowHeight - 20) + 'px;'                          +
+        '}'                                                                             +
+        '#boxQuestion {'                                                                +
+        '    height: ' + (windowHeight - remainingHeight - 20) + 'px;'                  +
+        '}'                                                                             +
+        '#emo-section, .slimScrollDiv, .emo-group-detail {'                             +
+        '    height : ' + (windowHeight - remainingHeight - 72 - 17) + 'px !important;' +
         '}'
     );
 
@@ -226,6 +214,16 @@
     toBeAppendedToClock.appendChild(btnRemove);
     toBeAppendedToClock.appendChild(btnClear);
     clock.appendChild(toBeAppendedToClock);
+
+    var btnOnline = document.createElement('input');
+    btnOnline.type = 'button';
+    btnOnline.value = 'Online';
+    btnOnline.addEventListener('click', function() {
+        $.post('qaload.php', 'Action=rq', function(data) {
+            $('#boxQA > ul').prepend($(data.ou).fadeIn('slow'));
+        });
+    });
+    document.getElementsByClassName('input-section-a')[0].appendChild(btnOnline);
 
     // Here comes our own functions.
     function changeEmoGroup() {
