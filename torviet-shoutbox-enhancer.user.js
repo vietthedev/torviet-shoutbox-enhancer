@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.9
+// @version      0.8.10
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -76,8 +76,8 @@
             request.send('group=' + groupName);
         };
         var makeEmoticonHtml = function(emoName) {
-            emoHtml = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:1px;">'        +
-                '<img style="max-width: 43px; max-height: 43px; cursor: pointer;" src="/pic/smilies/' + emoName +
+            emoHtml = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:0 0 1px 1px;">' +
+                '<img style="max-width: 43px; max-height: 43px; cursor: pointer;" src="/pic/smilies/' + emoName  +
                 '.gif" alt="[em' + emoName + ']"></div>';   
         };
 
@@ -214,16 +214,6 @@
     toBeAppendedToClock.appendChild(btnRemove);
     toBeAppendedToClock.appendChild(btnClear);
     clock.appendChild(toBeAppendedToClock);
-
-    var btnOnline = document.createElement('input');
-    btnOnline.type = 'button';
-    btnOnline.value = 'Online';
-    btnOnline.addEventListener('click', function() {
-        $.post('qaload.php', 'Action=rq', function(data) {
-            $('#boxQA > ul').prepend($(data.ou).fadeIn('slow'));
-        });
-    });
-    document.getElementsByClassName('input-section-a')[0].appendChild(btnOnline);
 
     // Here comes our own functions.
     function changeEmoGroup() {
