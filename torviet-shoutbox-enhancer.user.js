@@ -168,19 +168,28 @@
     }
 
     // And polish things with our custom CSS.
+    var specialCase = typeof InstallTrigger !== 'undefined' ?
+        '.wrapper-below {'                      +
+        '    height: calc(100% - 67px);'        +
+        '}'                                     +
+        '#emo-section {'                        +
+        '    height: calc(100% - 74px);'        +
+        '}' :
+    '.wrapper-below {'                          +
+        '    height: calc(100% - 62px);'        +
+        '}'                                     +
+        '#emo-section {'                        +
+        '    height: calc(100% - 69px);'        +
+        '}';
+    
     GM_addStyle(
         '.all-wrapper {'                         +
         '    background-image: none !important;' +
         '}'                                      +
-        '.wrapper-below {'                       +
-        '    height: calc(100% - 62px);'         +
-        '}'                                      +
-        '#emo-section {'                         +
-        '    height: calc(100% - 69px);'         +
-        '}'                                      +
         '.slimScrollDiv, .emo-group-detail {'    +
         '    height: 100% !important;'           +
-        '}'
+        '}'                                      +
+        specialCase
     );
 
     var toBeAppendedToClock = document.createDocumentFragment(),
