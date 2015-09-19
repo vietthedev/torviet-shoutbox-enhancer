@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.10
+// @version      0.8.11
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -167,24 +167,19 @@
         clock.removeChild(clock.lastChild);
     }
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Here we get the window height of the current window size and the height *
-     * without the input section and the div holding the navigation.           *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    var windowHeight    = window.innerHeight,
-        remainingHeight = inputSection.parentNode.offsetHeight + navigationPage.offsetHeight;
-
     // And polish things with our custom CSS.
     GM_addStyle(
-        '.all-wrapper {'                                                                +
-        '    background-image: none !important;'                                        +
-        '    height          : ' + (windowHeight - 20) + 'px;'                          +
-        '}'                                                                             +
-        '#boxQuestion {'                                                                +
-        '    height: ' + (windowHeight - remainingHeight - 20) + 'px;'                  +
-        '}'                                                                             +
-        '#emo-section, .slimScrollDiv, .emo-group-detail {'                             +
-        '    height : ' + (windowHeight - remainingHeight - 72 - 17) + 'px !important;' +
+        '.all-wrapper {'                         +
+        '    background-image: none !important;' +
+        '}'                                      +
+        '.wrapper-below {'                       +
+        '    height: calc(100% - 62px);'         +
+        '}'                                      +
+        '#emo-section {'                         +
+        '    height: calc(100% - 69px);'         +
+        '}'                                      +
+        '.slimScrollDiv, .emo-group-detail {'    +
+        '    height: 100% !important;'           +
         '}'
     );
 
