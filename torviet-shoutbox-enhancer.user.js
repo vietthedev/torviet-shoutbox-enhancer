@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.11
+// @version      0.8.12
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -17,7 +17,8 @@
 
 (function() {
     // First let's get the elements which we will work on.
-    var boxHead        = document.getElementById('boxHead'),
+    var allWrapper     = document.getElementsByClassName('all-wrapper')[0],
+        boxHead        = document.getElementById('boxHead'),
         marquee        = document.getElementsByClassName('marquee')[0],
         sltTheme       = document.getElementById('sltTheme'),
         clock          = document.getElementById('clock'),
@@ -160,6 +161,7 @@
      * Now remove the unnecessary elements including the box containing new torrents *
      * and football news, the warning, the theme drop-down list and the clock.       *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    allWrapper.className = 'all-wrapper';
     boxHead.parentNode.removeChild(boxHead);
     marquee.parentNode.removeChild(marquee);
     sltTheme.parentNode.removeChild(sltTheme);
@@ -175,17 +177,14 @@
         '#emo-section {'                        +
         '    height: calc(100% - 74px);'        +
         '}' :
-    '.wrapper-below {'                          +
+    '.wrapper-below {'                      +
         '    height: calc(100% - 62px);'        +
         '}'                                     +
         '#emo-section {'                        +
         '    height: calc(100% - 69px);'        +
         '}';
-    
+
     GM_addStyle(
-        '.all-wrapper {'                         +
-        '    background-image: none !important;' +
-        '}'                                      +
         '.slimScrollDiv, .emo-group-detail {'    +
         '    height: 100% !important;'           +
         '}'                                      +
