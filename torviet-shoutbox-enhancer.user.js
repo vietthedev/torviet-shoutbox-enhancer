@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.13
+// @version      0.8.14
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -22,9 +22,7 @@
         marquee        = document.getElementById('marquee'),
         sltTheme       = document.getElementById('sltTheme'),
         clock          = document.getElementById('clock'),
-        inputSection   = document.getElementById('input-section'),
         idQuestion     = document.getElementById('idQuestion'),
-        navigationPage = document.getElementById('navigation-page'),
         emoGroup       = document.getElementById('emo-group'),
         emoGroupDetail = document.getElementById('emo-group-detail');
 
