@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.14
+// @version      0.8.15
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -118,11 +118,7 @@
                 location.href = 'qa.php';
             },
             getEmoticons: function(groupName) {
-                var emoHtmlOld = emoHtml;
-                do {
-                    requestEmoticons(groupName);
-                }
-                while (emoHtml === emoHtmlOld);
+                requestEmoticons(groupName);
                 return emoHtml;
             },
             generateEmoticons: function(emoName) {
@@ -216,6 +212,16 @@
     toBeAppendedToClock.appendChild(btnClear);
     clock.appendChild(toBeAppendedToClock);
 
+    var btnOnline = document.createElement('input');
+    btnOnline.type = 'button';
+    btnOnline.value = 'Online';
+    btnOnline.addEventListener('click', function() {
+        $.post('qaload.php', 'Action=rq', function(data) {
+            $('#boxQA').find('ul').prepend($(data.ou).fadeIn('slow'));
+        });
+    });
+    document.getElementById('input-section-a').appendChild(btnOnline);
+
     // Here comes our own functions.
     function changeEmoGroup() {
         emoGroupDetail.innerHTML = EMOTICON.getEmoticons(emoGroup.value);
@@ -236,6 +242,7 @@
                 emoGroup !== document.activeElement &&
                     emoGroup.selectedIndex !== 0 &&
                     emoGroup.selectedIndex--;
+                console.log(emoGroup.value);
                 changeEmoGroup();
                 break;
                 // Enter.
