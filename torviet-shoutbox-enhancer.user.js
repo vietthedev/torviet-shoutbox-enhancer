@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.8.15
+// @version      0.9
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -21,6 +21,7 @@
         boxHead        = document.getElementById('boxHead'),
         marquee        = document.getElementById('marquee'),
         sltTheme       = document.getElementById('sltTheme'),
+        boxQuestion    = document.getElementById("boxQuestion"),
         clock          = document.getElementById('clock'),
         idQuestion     = document.getElementById('idQuestion'),
         emoGroup       = document.getElementById('emo-group'),
@@ -77,7 +78,7 @@
         var makeEmoticonHtml = function(emoName) {
             emoHtml = '<div style="height:43px;width:43px;float:left;display:inline-block;margin:0 0 1px 1px;">' +
                 '<img style="max-width: 43px; max-height: 43px; cursor: pointer;" src="/pic/smilies/' + emoName  +
-                '.gif" alt="[em' + emoName + ']"></div>';   
+                '.gif" alt="[em' + emoName + ']"></div>';
         };
 
         return {
@@ -171,7 +172,7 @@
         '#emo-section {'                        +
         '    height: calc(100% - 74px);'        +
         '}' :
-    '#wrapper-below {'                      +
+    '#wrapper-below {'                          +
         '    height: calc(100% - 62px);'        +
         '}'                                     +
         '#emo-section {'                        +
@@ -211,16 +212,6 @@
     toBeAppendedToClock.appendChild(btnRemove);
     toBeAppendedToClock.appendChild(btnClear);
     clock.appendChild(toBeAppendedToClock);
-
-    var btnOnline = document.createElement('input');
-    btnOnline.type = 'button';
-    btnOnline.value = 'Online';
-    btnOnline.addEventListener('click', function() {
-        $.post('qaload.php', 'Action=rq', function(data) {
-            $('#boxQA').find('ul').prepend($(data.ou).fadeIn('slow'));
-        });
-    });
-    document.getElementById('input-section-a').appendChild(btnOnline);
 
     // Here comes our own functions.
     function changeEmoGroup() {
@@ -281,8 +272,71 @@
         }
     }
 
+    function arrayIsNumeric(arr) {
+        return arr.every(element => !isNaN(element));
+    }
+
+    function decimalArrayToString(messageArray) {
+        return String.fromCharCode.apply(null, messageArray);
+    }
+
+    function messageIsUrl(message) {
+        return /^(http)/.test(message);
+    }
+
+    function formatMessage(message) {
+        return "<a class=\"faqlink\" href=\"" + message + "\" target=\"_blank\">" +
+            (message.length > 80 ?
+             (message.substr(0, 20) + "..." +
+              message.substring(message.length - 30, message.length) + "</a>") : message);
+    }
+
+    function decodeMessages() {
+        $(".Q1, .Q1-right").find("span").not(".nowrap, .time").each(function () {
+            var message = $(this).html();
+
+            if (!arrayIsNumeric(message.split(" "))) {
+                return true;
+            }
+
+            message = decimalArrayToString(message.split(" "));
+
+            $(this).html(messageIsUrl(message) ? formatMessage(message) : message);
+        });
+    }
+
+    function observeMessages() {
+        var observer = new MutationObserver(function (mutations, observer) {
+            var nodes               = mutations[0].addedNodes[0].getElementsByTagName("span"),
+                targetNode          = nodes[nodes.length -1],
+                parentNodeClassName = targetNode && targetNode.parentNode.className,
+                message             = targetNode && targetNode.innerHTML;
+
+            if (parentNodeClassName === "Q1" || parentNodeClassName === "Q1-right") {
+                if (!arrayIsNumeric(message.split(" "))) {
+                    return false;
+                }
+
+                message = decimalArrayToString(message.split(" "));
+
+                if (messageIsUrl(message)) {
+                    targetNode.innerHTML = formatMessage(message);
+                } else {
+                    targetNode.innerHTML = message;
+                }
+            }
+        });
+
+        observer.observe(boxQuestion, {
+            childList: true,
+            subtree  : true
+        });
+    }
+
     // The following should run at startup.
     document.addEventListener('keydown', keyEvent);
+    decodeMessages();
+    observeMessages();
     EMOTICON.checkemoList();
     EMOTICON.addEmosToEmoGroup();
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
