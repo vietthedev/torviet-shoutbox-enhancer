@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.9
+// @version      0.9.1
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -172,7 +172,7 @@
         "#emo-section {"                        +
         "    height: calc(100% - 74px);"        +
         "}" :
-    "#wrapper-below {"                          +
+        "#wrapper-below {"                      +
         "    height: calc(100% - 62px);"        +
         "}"                                     +
         "#emo-section {"                        +
@@ -312,18 +312,20 @@
                 parentNodeClassName = targetNode && targetNode.parentNode.className,
                 message             = targetNode && targetNode.innerHTML;
 
-            if (parentNodeClassName === "Q1" || parentNodeClassName === "Q1-right") {
-                if (!arrayIsNumeric(message.split(" "))) {
-                    return false;
-                }
+            if (parentNodeClassName !== "Q1" && parentNodeClassName !== "Q1-right") {
+                return false;
+            }
 
-                message = decimalArrayToString(message.split(" "));
+            if (!arrayIsNumeric(message.split(" "))) {
+                return false;
+            }
 
-                if (messageIsUrl(message)) {
-                    targetNode.innerHTML = formatMessage(message);
-                } else {
-                    targetNode.innerHTML = message;
-                }
+            message = decimalArrayToString(message.split(" "));
+
+            if (messageIsUrl(message)) {
+                targetNode.innerHTML = formatMessage(message);
+            } else {
+                targetNode.innerHTML = message;
             }
         });
 
