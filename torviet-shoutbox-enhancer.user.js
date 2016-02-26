@@ -213,16 +213,6 @@
     toBeAppendedToClock.appendChild(btnClear);
     clock.appendChild(toBeAppendedToClock);
 
-    var btnOnline = document.createElement("input");
-    btnOnline.type = "button";
-    btnOnline.value = "Online";
-    btnOnline.addEventListener("click", function() {
-        $.post("qaload.php", "Action=rq", function(data) {
-            $("#boxQA").find("ul").prepend($(data.ou).fadeIn("slow"));
-        });
-    });
-    document.getElementById("input-section-a").appendChild(btnOnline);
-
     // Here comes our own functions.
     function changeEmoGroup() {
         emoGroupDetail.innerHTML = EMOTICON.getEmoticons(emoGroup.value);
