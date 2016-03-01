@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.9.1
+// @version      0.9.2
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -277,7 +277,9 @@
     }
 
     function decimalArrayToString(messageArray) {
-        return String.fromCharCode.apply(null, messageArray);
+        return messageArray[0].length !== 8 ?
+            String.fromCharCode.apply(null, messageArray) :
+        String.fromCharCode.apply(null, messageArray.map(element => parseInt(element, 2).toString(10)));
     }
 
     function messageIsUrl(message) {
