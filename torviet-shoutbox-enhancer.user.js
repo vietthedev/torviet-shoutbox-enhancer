@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.9.2
+// @version      0.9.3
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -172,7 +172,7 @@
         "#emo-section {"                        +
         "    height: calc(100% - 74px);"        +
         "}" :
-        "#wrapper-below {"                      +
+    "#wrapper-below {"                      +
         "    height: calc(100% - 62px);"        +
         "}"                                     +
         "#emo-section {"                        +
@@ -272,14 +272,24 @@
         }
     }
 
-    function arrayIsNumeric(arr) {
-        return arr.every(element => !isNaN(element));
+    function arrayIsNumeric(messageArray) {
+        return messageArray.every(element => !isNaN(element));
     }
 
-    function decimalArrayToString(messageArray) {
-        return messageArray[0].length !== 8 ?
-            String.fromCharCode.apply(null, messageArray) :
-        String.fromCharCode.apply(null, messageArray.map(element => parseInt(element, 2).toString(10)));
+    function arrayIsHexadecimal(messageArray) {
+        return messageArray.every(element => element.length === 2);
+    }
+
+    function encodedArrayToString(messageArray) {
+        if (messageArray[0].length === 8) {
+            return String.fromCharCode.apply(null, messageArray.map(element => parseInt(element, 2).toString(10)));
+        }
+
+        if (messageArray.every(element => element.length === 2)) {
+            return String.fromCharCode.apply(null, messageArray.map(element => parseInt(element, 16)));
+        }
+
+        return String.fromCharCode.apply(null, messageArray);
     }
 
     function messageIsUrl(message) {
@@ -295,13 +305,14 @@
 
     function decodeMessages() {
         $(".Q1, .Q1-right").find("span").not(".nowrap, .time").each(function () {
-            var message = $(this).html();
+            var message      = $(this).html(),
+                messageArray = message.split(" ");
 
-            if (!arrayIsNumeric(message.split(" "))) {
+            if (!arrayIsNumeric(messageArray) && !arrayIsHexadecimal(messageArray)) {
                 return true;
             }
 
-            message = decimalArrayToString(message.split(" "));
+            message = encodedArrayToString(messageArray);
 
             $(this).html(messageIsUrl(message) ? formatMessage(message) : message);
         });
@@ -311,18 +322,19 @@
         var observer = new MutationObserver(function (mutations, observer) {
             var nodes               = mutations[0].addedNodes[0].getElementsByTagName("span"),
                 targetNode          = nodes[nodes.length -1],
-                parentNodeClassName = targetNode && targetNode.parentNode.className,
-                message             = targetNode && targetNode.innerHTML;
+                parentNodeClassName = targetNode.parentNode.className,
+                message             = targetNode.innerHTML,
+                messageArray        = message.split(" ");
 
             if (parentNodeClassName !== "Q1" && parentNodeClassName !== "Q1-right") {
                 return false;
             }
 
-            if (!arrayIsNumeric(message.split(" "))) {
+            if (!arrayIsNumeric(messageArray) && !arrayIsHexadecimal(messageArray)) {
                 return false;
             }
 
-            message = decimalArrayToString(message.split(" "));
+            message = encodedArrayToString(messageArray);
 
             if (messageIsUrl(message)) {
                 targetNode.innerHTML = formatMessage(message);
