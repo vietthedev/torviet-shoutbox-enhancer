@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.9.3
+// @version      0.9.4
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -308,7 +308,8 @@
             var message      = $(this).html(),
                 messageArray = message.split(" ");
 
-            if (!arrayIsNumeric(messageArray) && !arrayIsHexadecimal(messageArray)) {
+            if ((!arrayIsNumeric(messageArray) && !arrayIsHexadecimal(messageArray)) ||
+               messageArray.length <= 1) {
                 return true;
             }
 
@@ -330,7 +331,8 @@
                 return false;
             }
 
-            if (!arrayIsNumeric(messageArray) && !arrayIsHexadecimal(messageArray)) {
+            if ((!arrayIsNumeric(messageArray) && !arrayIsHexadecimal(messageArray)) ||
+               messageArray.length <= 1) {
                 return false;
             }
 
