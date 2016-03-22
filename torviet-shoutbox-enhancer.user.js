@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.9.4
+// @version      0.9.5
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -276,17 +276,9 @@
         return messageArray.every(element => !isNaN(element));
     }
 
-    function arrayIsHexadecimal(messageArray) {
-        return messageArray.every(element => element.length === 2);
-    }
-
     function encodedArrayToString(messageArray) {
         if (messageArray[0].length === 8) {
             return String.fromCharCode.apply(null, messageArray.map(element => parseInt(element, 2).toString(10)));
-        }
-
-        if (messageArray.every(element => element.length === 2)) {
-            return String.fromCharCode.apply(null, messageArray.map(element => parseInt(element, 16)));
         }
 
         return String.fromCharCode.apply(null, messageArray);
@@ -308,8 +300,7 @@
             var message      = $(this).html(),
                 messageArray = message.split(" ");
 
-            if ((!arrayIsNumeric(messageArray) && !arrayIsHexadecimal(messageArray)) ||
-               messageArray.length <= 1) {
+            if ((!arrayIsNumeric(messageArray)) || messageArray.length <= 1) {
                 return true;
             }
 
@@ -331,8 +322,7 @@
                 return false;
             }
 
-            if ((!arrayIsNumeric(messageArray) && !arrayIsHexadecimal(messageArray)) ||
-               messageArray.length <= 1) {
+            if ((!arrayIsNumeric(messageArray)) || messageArray.length <= 1) {
                 return false;
             }
 
