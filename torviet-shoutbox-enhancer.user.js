@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      0.9.5
+// @version      0.10
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -69,9 +69,8 @@
              * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
             request.open("POST", "qa_smiley_ajax.php", false);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            request.onreadystatechange = function() {
-                request.readyState == 4 && request.status == 200 &&
-                    (emoHtml = JSON.parse(request.responseText).str);
+            request.onload = function() {
+                request.status === 200 && (emoHtml = JSON.parse(request.responseText).str);
             };
             request.send("group=" + groupName);
         };
@@ -213,10 +212,44 @@
     toBeAppendedToClock.appendChild(btnClear);
     clock.appendChild(toBeAppendedToClock);
 
+    var btnOnline = document.createElement("input");
+    btnOnline.type = "button";
+    btnOnline.value = "Online";
+    btnOnline.addEventListener("click", function() {
+        $.post("qaload.php", "Action=rq", function(data) {
+            $("#boxQA").find("ul").prepend($(data.ou).fadeIn("slow"));
+        });
+    });
+    document.getElementById("input-section-a").appendChild(btnOnline);
+
     // Here comes our own functions.
     function changeEmoGroup() {
-        emoGroupDetail.innerHTML = EMOTICON.getEmoticons(emoGroup.value);
-        // EMOTICON.addEmoGroupEvent();
+        var promise = new Promise(function (resolve, reject) {
+            var request = new XMLHttpRequest();
+
+            request.open("POST", "qa_smiley_ajax.php");
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            request.onload = function () {
+                if (request.status === 200) {
+                    resolve(JSON.parse(request.responseText).str);
+                } else {
+                    reject(Error(request.statusText));
+                }
+            };
+            request.onerror = function () {
+                reject(Error("Network error"));
+            };
+
+            request.send("group=" + emoGroup.value);
+        });
+
+        promise.then(
+            function (result) {
+                emoGroupDetail.innerHTML = result;
+            },
+            function (error) {
+                console.error(error);
+            });
     }
 
     function keyEvent(e) {
