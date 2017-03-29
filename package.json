@@ -16,7 +16,8 @@
     "author": "Salad",
     "license": "WTFPL",
     "scripts": {
-        "build": "gulp",
+        "build": "gulp build",
+        "start": "gulp",
         "test": "jest"
     },
     "jest": {
