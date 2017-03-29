@@ -1,0 +1,28 @@
+{
+    "devDependencies": {
+        "gulp": "^3.9.1",
+        "gulp-concat": "^2.6.1",
+        "gulp-jsbeautifier": "^2.1.0",
+        "gulp-jshint": "^2.0.4",
+        "gulp-replace": "^0.5.4",
+        "jest": "^19.0.2",
+        "jshint": "^2.9.4",
+        "requirejs": "^2.3.3"
+    },
+    "name": "torviet-shoutbox-enhancer",
+    "version": "1.0.0",
+    "description": "A script to enhance the shoutbox at TorViet",
+    "main": "torviet-shoutbox-enhancer.js",
+    "repository": "https://github.com/S-a-l-a-d/torviet-shoutbox-enhancer",
+    "author": "Salad",
+    "license": "WTFPL",
+    "scripts": {
+        "build": "gulp",
+        "test": "jest"
+    },
+    "jest": {
+        "setupFiles": [
+            "./__test__/setup.js"
+        ]
+    }
+}
