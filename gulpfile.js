@@ -2,7 +2,8 @@ const gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     concat = require('gulp-concat'),
     prettify = require('gulp-jsbeautifier'),
-    replace = require('gulp-replace');
+    replace = require('gulp-replace'),
+    fs = require('fs');
 
 gulp.task('lint', () => {
     return gulp.src(['js/*.js'])
@@ -18,9 +19,11 @@ gulp.task('build', () => {
             'include/footer.js'
         ])
         .pipe(concat('torviet-shoutbox-enhancer.js'))
+        .pipe(replace('@{version}', JSON.parse(fs.readFileSync(
+            './package.json')).version))
         .pipe(replace(/\r\nmodule\.exports.+;\r\n/g, ''))
         .pipe(prettify())
-        .pipe(gulp.dest('.'));
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', () => {
