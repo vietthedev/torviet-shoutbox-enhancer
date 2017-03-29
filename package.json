@@ -11,7 +11,7 @@
     "name": "torviet-shoutbox-enhancer",
     "version": "1.0.0",
     "description": "A script to enhance the shoutbox at TorViet",
-    "main": "torviet-shoutbox-enhancer.js",
+    "main": "./dist/torviet-shoutbox-enhancer.js",
     "repository": "https://github.com/S-a-l-a-d/torviet-shoutbox-enhancer",
     "author": "Salad",
     "license": "WTFPL",
