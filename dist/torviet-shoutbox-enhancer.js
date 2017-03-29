@@ -16,7 +16,7 @@
 
     class DomElementHelper {
         /**
-         * Adds an element to after the reference element. Returns true if the element is added successfully and false if failed.
+         * Adds an element to after the reference element.
          * 
          * @static
          * @param {HTMLElement} newElement - The element to be added.
@@ -41,7 +41,7 @@
         }
 
         /**
-         * Removes an element from the DOM. Returns true if the element is removed successfully and false if failed.
+         * Removes an element from the DOM.
          * 
          * @static
          * @param {HTMLElement} element - The element to be removed.
