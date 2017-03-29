@@ -5,25 +5,23 @@ class DomElementHelper {
      * @static
      * @param {HTMLElement} newElement - The element to be added.
      * @param {HTMLElement} referenceElement - The element to be added after.
-     * @returns {Boolean}
+     * @returns
      * 
      * @memberOf DomElementHelper
      */
     static addAfter(newElement, referenceElement) {
         if (!newElement) {
             console.error('New element is invalid.');
-            return false;
+            return;
         }
 
         if (!referenceElement) {
             console.error('Reference element is invalid.');
-            return false;
+            return;
         }
 
         referenceElement.parentNode
             .insertBefore(newElement, referenceElement.nextSibling);
-
-        return true;
     }
 
     /**
@@ -31,19 +29,17 @@ class DomElementHelper {
      * 
      * @static
      * @param {HTMLElement} element - The element to be removed.
-     * @returns {Boolean}
+     * @returns
      * 
      * @memberOf DomElementHelper
      */
     static remove(element) {
         if (!element) {
             console.error('Element to be removed is invalid.');
-            return false;
+            return;
         }
 
         element.parentNode.removeChild(element);
-
-        return true;
     }
 }
 
