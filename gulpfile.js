@@ -21,7 +21,7 @@ gulp.task('build', () => {
         .pipe(concat('torviet-shoutbox-enhancer.js'))
         .pipe(replace('@{version}', JSON.parse(fs.readFileSync(
             './package.json')).version))
-        .pipe(replace(/\r\nmodule\.exports.+;\r\n/g, ''))
+        .pipe(replace(/(\r\n|\r|\n)module\.exports.+;(\r\n|\r|\n)/g, ''))
         .pipe(prettify())
         .pipe(gulp.dest('dist'));
 });
