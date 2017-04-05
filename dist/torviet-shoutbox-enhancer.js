@@ -15,16 +15,6 @@
     'use strict';
 
     class DomElementHelper {
-        /**
-         * Adds an element to after the reference element.
-         * 
-         * @static
-         * @param {HTMLElement} newElement - The element to be added.
-         * @param {HTMLElement} referenceElement - The element to be added after.
-         * @returns
-         * 
-         * @memberOf DomElementHelper
-         */
         static addAfter(newElement, referenceElement) {
             if (!newElement) {
                 console.error('New element is invalid.');
@@ -40,15 +30,6 @@
                 .insertBefore(newElement, referenceElement.nextSibling);
         }
 
-        /**
-         * Removes an element from the DOM.
-         * 
-         * @static
-         * @param {HTMLElement} element - The element to be removed.
-         * @returns
-         * 
-         * @memberOf DomElementHelper
-         */
         static remove(element) {
             if (!element) {
                 console.error('Element to be removed is invalid.');
@@ -59,14 +40,55 @@
         }
     }
 
-    let allWrapper = document.getElementById("all-wrapper"),
-        boxHead = document.getElementById("boxHead"),
-        marquee = document.getElementById("marquee"),
-        sltTheme = document.getElementById("sltTheme"),
-        boxQuestion = document.getElementById("boxQuestion"),
-        clock = document.getElementById("clock"),
-        idQuestion = document.getElementById("idQuestion"),
-        emoGroup = document.getElementById("emo-group"),
-        emoGroupDetail = document.getElementById("emo-group-detail");
+    class EmoticonService {
+        getEmoticon(emoticonName) {
+            return `<div style="height:43px;width:43px;float:left;display:inline-block;margin:0 0 1px 1px;">
+            "<img style="max-width: 43px; max-height: 43px; cursor: pointer;" src="/pic/smilies/
+            ${emoticonName}.gif" alt="[em${emoticonName}]"></div>`;
+        }
+
+        getEmoticonGroup(url, emoticonGroupName) {
+            return new Promise((resolve, reject) => {
+                let request = new XMLHttpRequest();
+
+                request.open('POST', url);
+                request.setRequestHeader('Content-type',
+                    'application/x-www-form-urlencoded');
+
+                request.onload = () => {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.responseText)
+                            .str);
+                    } else {
+                        reject(Error(request.statusText));
+                    }
+                };
+
+                request.onerror = () => {
+                    reject(Error('Network error'));
+                };
+
+                request.send('group=' + emoticonGroupName);
+            });
+        }
+    }
+
+    let allWrapper = document.getElementById('all-wrapper'),
+        boxHead = document.getElementById('boxHead'),
+        marquee = document.getElementById('marquee'),
+        sltTheme = document.getElementById('sltTheme'),
+        boxQuestion = document.getElementById('boxQuestion'),
+        clock = document.getElementById('clock'),
+        idQuestion = document.getElementById('idQuestion'),
+        emoGroup = document.getElementById('emo-group'),
+        emoGroupDetail = document.getElementById('emo-group-detail');
+
+    allWrapper.className = '';
+    DomElementHelper.remove(boxHead);
+    DomElementHelper.remove(marquee);
+    DomElementHelper.remove(sltTheme);
+    while (clock.lastChild) {
+        DomElementHelper.remove(clock.lastChild);
+    }
 
 })();

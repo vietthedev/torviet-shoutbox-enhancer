@@ -5,6 +5,7 @@
         "gulp-jsbeautifier": "^2.1.0",
         "gulp-jshint": "^2.0.4",
         "gulp-replace": "^0.5.4",
+        "gulp-strip-comments": "^2.4.5",
         "jest": "^19.0.2",
         "jshint": "^2.9.4"
     },
