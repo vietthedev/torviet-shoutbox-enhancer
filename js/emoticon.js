@@ -99,7 +99,6 @@ const EMOTICON = (emoticonService => {
             GM_deleteValue('emoticonListHtml');
             location.href = location.pathname;
         }
-
     };
     /* jshint ignore: end */
 })(new EmoticonService());
