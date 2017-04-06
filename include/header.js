@@ -9,7 +9,11 @@
 // @description  A small script to tweak the shoutbox
 // @author       Salad
 // @match        http://torviet.com/qa.php*
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_deleteValue
+// @grant        GM_addStyle
 // ==/UserScript==
 
-(function () {
+(() => {
     'use strict';

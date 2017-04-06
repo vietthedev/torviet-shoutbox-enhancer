@@ -7,7 +7,7 @@
             "jsbeautifyrc"
         ],
         "brace_style": "collapse,preserve-inline",
-        "break_chained_methods": false,
+        "break_chained_methods": true,
         "e4x": false,
         "end_with_newline": true,
         "indent_char": " ",

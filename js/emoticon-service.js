@@ -2,15 +2,41 @@ class EmoticonService {
     /**
      * Constructs the emoticon HTML from the name.
      * 
-     * @param {string} emoticonName 
+     * @param {string} emoticonName - The name of the emoticon.
      * @returns {string}
      * 
      * @memberOf EmoticonService
      */
     getEmoticon(emoticonName) {
-        return `<div style="height:43px;width:43px;float:left;display:inline-block;margin:0 0 1px 1px;">
-            "<img style="max-width: 43px; max-height: 43px; cursor: pointer;" src="/pic/smilies/
-            ${emoticonName}.gif" alt="[em${emoticonName}]"></div>`;
+        if (isNaN(emoticonName) || !this.isInteger(emoticonName)) return '';
+
+        return `
+            <div style="
+                     height: 43px;
+                     width: 43px;
+                     float: left;
+                     display: inline-block;
+                     margin: 0 0 1px 1px;">
+                <img style="
+                          max-width: 43px;
+                          max-height: 43px;
+                          cursor: pointer;"
+                      src="/pic/smilies/${emoticonName}.gif"
+                      alt="[em${emoticonName}]">
+            </div>
+            `;
+    }
+
+    /**
+     * Returns a Boolean value that indicates whether the number is an Integer.
+     * 
+     * @param {number} number - The number to be checked.
+     * @returns {Boolean}
+     * 
+     * @memberOf EmoticonService
+     */
+    isInteger(number) {
+        return number == parseInt(number, 10);
     }
 
     /**
@@ -22,7 +48,10 @@ class EmoticonService {
      * 
      * @memberOf EmoticonService
      */
-    getEmoticonGroup(url, emoticonGroupName) {
+    getEmoticons(url, emoticonGroupName) {
+        if (!url || !emoticonGroupName || !isNaN(emoticonGroupName))
+            return null;
+
         return new Promise((resolve, reject) => {
             let request = new XMLHttpRequest();
 
@@ -32,7 +61,8 @@ class EmoticonService {
 
             request.onload = () => {
                 if (request.status === 200) {
-                    resolve(JSON.parse(request.responseText).str);
+                    resolve(JSON.parse(request.responseText)
+                        .str);
                 } else {
                     reject(Error(request.statusText));
                 }

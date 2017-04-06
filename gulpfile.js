@@ -15,15 +15,18 @@ gulp.task('lint', () => {
 gulp.task('build', () => {
     return gulp.src([
             'include/header.js',
+            'js/declaration.js',
             'js/dom-element-helper.js',
             'js/emoticon-service.js',
+            'js/emoticon.js',
             'js/main.js',
             'include/footer.js'
         ])
         .pipe(concat('torviet-shoutbox-enhancer.js'))
         .pipe(stripComments({ ignore: /\/\//g }))
         .pipe(replace('@{version}',
-            JSON.parse(fs.readFileSync('./package.json')).version))
+            JSON.parse(fs.readFileSync('./package.json'))
+            .version))
         .pipe(replace(/(\r\n|\r|\n)module\.exports.+(\r\n|\r|\n)/g, ''))
         .pipe(prettify())
         .pipe(gulp.dest('dist'));
