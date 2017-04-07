@@ -1,0 +1,12 @@
+{
+    "extends": "airbnb",
+    "env": {
+        "browser": true,
+        "jest": true,
+        "greasemonkey": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "script"
+    }
+}

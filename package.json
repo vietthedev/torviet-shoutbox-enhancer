@@ -1,13 +1,13 @@
 {
     "devDependencies": {
+        "eslint": "^3.19.0",
         "gulp": "^3.9.1",
         "gulp-concat": "^2.6.1",
+        "gulp-eslint": "^3.0.1",
         "gulp-jsbeautifier": "^2.1.0",
-        "gulp-jshint": "^2.0.4",
         "gulp-replace": "^0.5.4",
         "gulp-strip-comments": "^2.4.5",
-        "jest": "^19.0.2",
-        "jshint": "^2.9.4"
+        "jest": "^19.0.2"
     },
     "name": "torviet-shoutbox-enhancer",
     "version": "1.0.0",
@@ -25,5 +25,11 @@
         "setupFiles": [
             "./__test__/setup.js"
         ]
+    },
+    "dependencies": {
+        "eslint-config-airbnb": "^14.1.0",
+        "eslint-plugin-import": "2.2.0",
+        "eslint-plugin-jsx-a11y": "4.0.0",
+        "eslint-plugin-react": "6.9.0"
     }
 }

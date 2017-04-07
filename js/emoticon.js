@@ -1,104 +1,84 @@
-const EMOTICON = (emoticonService => {
-    let cachedEmoticonList = GM_getValue('emoticonList'),
-        cachedEmoticonListHtml = GM_getValue('emoticonListHtml') || '',
-        emoticonHtml = '';
+const EMOTICON = (() => {
+  let cachedEmoticonList = GM_getValue('emoticonList');
+  let cachedEmoticonListHtml = GM_getValue('emoticonListHtml') || '';
 
-    let promptForEmoticonList = (action, emoticonList) => {
-        let message = `Chọn bộ emoticon bạn muốn ${action}:\n`,
-            answer = '';
+  const promptForEmoticonList = (action, emoticonList) => {
+    let message = `Chọn bộ emoticon bạn muốn ${action}:\n`;
+    let answer = '';
 
-        emoticonList.forEach((item, index) => {
-            message += `${index + 1}. ${item}\n`;
-        });
+    message += emoticonList.reduce((accumulator, current, index) =>
+      accumulator + `${index + 1}. ${current}\n`, '');
 
-        message +=
-            'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường.' +
-            'Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
+    message += 'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường. Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
 
-        answer = prompt(message);
+    answer = prompt(message);
 
-        if (!answer || answer.trim() === '') return '';
+    if (!answer || answer.trim() === '') return '';
 
-        return answer.replace(/\s{2,}/g, ' ')
-            .trim()
-            .split(',');
-    };
+    return answer.replace(/\s{2,}/g, ' ').trim().split(',');
+  };
 
-    let initEmoticonList = () => {
-        let availableEmoticonList = Array.apply(null, emoGroup.options)
-            .map(element => element.text);
+  const initEmoticonList = () => {
+    const availableEmoticonList = Array(...emoGroup.options).map(element => element.text);
 
-        cachedEmoticonList =
-            promptForEmoticonList('sử dụng', availableEmoticonList);
+    cachedEmoticonList = promptForEmoticonList('sử dụng', availableEmoticonList);
 
-        if (cachedEmoticonList === '') return;
+    if (cachedEmoticonList === '') return;
 
-        GM_setValue('emoticonList', cachedEmoticonList);
-    };
-    /* jshint ignore: start */
-    return {
-        emoticonListExists: () => {
-            if (!cachedEmoticonList) initEmoticonList();
-        },
-        addToDom: async () => {
-            emoGroupDetail.innerHTML = '';
+    GM_setValue('emoticonList', cachedEmoticonList);
+  };
 
-            if (cachedEmoticonListHtml === '') {
-                for (let item of cachedEmoticonList) {
-                    cachedEmoticonListHtml += isNaN(item) ?
-                        await emoticonService.getEmoticons(apiPath,
-                            item) :
-                        emoticonService.getEmoticon(item);
-                }
+  return {
+    emoticonListExists: () => {
+      if (!cachedEmoticonList) initEmoticonList();
+    },
+    addToDom: async () => {
+      emoGroupDetail.innerHTML = '';
 
-                GM_setValue(
-                    'emoticonListHtml', cachedEmoticonListHtml);
-            }
+      if (cachedEmoticonListHtml === '') {
+        cachedEmoticonListHtml = (await Promise.all(cachedEmoticonList.map(async (item) => {
+          return isNaN(item) ?
+            await EmoticonService.getEmoticons(apiPath, item) :
+            await EmoticonService.getEmoticon(item);
+        }))).join('');
 
-            emoGroupDetail.innerHTML = cachedEmoticonListHtml;
-        },
-        add: () => {
-            let availableEmoticonList = Array.apply(null, emoGroup.options)
-                .map(element => element.text)
-                .filter(element =>
-                    !cachedEmoticonList.includes(element));
+        GM_setValue('emoticonListHtml', cachedEmoticonListHtml);
+      }
 
-            let emoticonListToAdd =
-                promptForEmoticonList('thêm', availableEmoticonList);
+      emoGroupDetail.innerHTML = cachedEmoticonListHtml;
+    },
+    add: () => {
+      const availableEmoticonList = Array(...emoGroup.options)
+        .map(item => item.text)
+        .filter(item => !cachedEmoticonList.includes(item));
 
-            if (emoticonListToAdd === '') return;
+      const emoticonListToAdd = promptForEmoticonList('thêm', availableEmoticonList);
 
-            for (let emoticonGroup of emoticonListToAdd) {
-                if (!cachedEmoticonList.includes(emoticonGroup))
-                    cachedEmoticonList.push(emoticonGroup);
-            }
+      if (emoticonListToAdd === '') return;
 
-            GM_setValue('emoticonList', cachedEmoticonList);
-            GM_deleteValue('emoticonListHtml');
-            location.href = location.pathname;
-        },
-        remove: () => {
-            let emoticonListToRemove =
-                promptForEmoticonList('xóa', cachedEmoticonList);
+      Array.prototype.push.apply(cachedEmoticonList,
+        emoticonListToAdd.filter(item => !cachedEmoticonList.includes(item)));
 
-            if (emoticonListToRemove === '') return;
+      GM_setValue('emoticonList', cachedEmoticonList);
+      GM_deleteValue('emoticonListHtml');
+      location.href = location.pathname;
+    },
+    remove: () => {
+      const emoticonListToRemove = promptForEmoticonList('xóa', cachedEmoticonList);
 
-            for (let emoticonGroup of emoticonListToRemove) {
-                if (cachedEmoticonList.includes(emoticonGroup))
-                    cachedEmoticonList.splice(
-                        cachedEmoticonList.indexOf(emoticonGroup),
-                        1);
-            }
+      if (emoticonListToRemove === '') return;
 
-            GM_setValue('emoticonList', cachedEmoticonList);
-            GM_deleteValue('emoticonListHtml');
-            location.href = location.pathname;
-        },
-        clear: () => {
-            GM_deleteValue('emoticonList');
-            GM_deleteValue('emoticonListHtml');
-            location.href = location.pathname;
-        }
-    };
-    /* jshint ignore: end */
-})(new EmoticonService());
+      cachedEmoticonList =
+        cachedEmoticonList.filter(item => !emoticonListToRemove.includes(item));
+
+      GM_setValue('emoticonList', cachedEmoticonList);
+      GM_deleteValue('emoticonListHtml');
+      location.href = location.pathname;
+    },
+    clear: () => {
+      GM_deleteValue('emoticonList');
+      GM_deleteValue('emoticonListHtml');
+      location.href = location.pathname;
+    },
+  };
+})();

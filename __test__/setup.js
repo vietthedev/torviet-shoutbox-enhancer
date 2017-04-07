@@ -51,7 +51,7 @@ document.body.innerHTML =
             </div>
         </div>
     </div>
-    
+
         <!--<form action="" method="post" onsubmit="return QA.postQuestion()">-->
         <div id="input-wrapper">
             <div id="input-section">

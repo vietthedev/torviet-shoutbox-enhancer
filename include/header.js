@@ -16,4 +16,3 @@
 // ==/UserScript==
 
 (() => {
-    'use strict';
