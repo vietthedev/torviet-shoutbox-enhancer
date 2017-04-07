@@ -72,13 +72,11 @@
         const request = new XMLHttpRequest();
 
         request.open('POST', url);
-        request.setRequestHeader('Content-type',
-          'application/x-www-form-urlencoded');
+        request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
         request.onload = () => {
           if (request.status === 200) {
-            resolve(JSON.parse(request.responseText)
-              .str);
+            resolve(JSON.parse(request.responseText).str);
           } else {
             reject(Error(request.statusText));
           }
