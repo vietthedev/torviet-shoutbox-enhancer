@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      1.1.0
+// @version      1.1.1
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -151,7 +151,7 @@
 
         if (emoticonListToAdd === '') return;
 
-        Array.prototype.push.apply(cachedEmoticonList,
+        cachedEmoticonList = cachedEmoticonList.concat(
           emoticonListToAdd.filter(item => !cachedEmoticonList.includes(item)));
 
         GM_setValue('emoticonList', cachedEmoticonList);

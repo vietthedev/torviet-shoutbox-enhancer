@@ -56,7 +56,7 @@ const EMOTICON = (() => {
 
       if (emoticonListToAdd === '') return;
 
-      Array.prototype.push.apply(cachedEmoticonList,
+      cachedEmoticonList = cachedEmoticonList.concat(
         emoticonListToAdd.filter(item => !cachedEmoticonList.includes(item)));
 
       GM_setValue('emoticonList', cachedEmoticonList);
