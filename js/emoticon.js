@@ -48,7 +48,7 @@ const EMOTICON = (() => {
       emoGroupDetail.innerHTML = cachedEmoticonListHtml;
     },
     add: () => {
-      const availableEmoticonList = Array(...emoGroup.options)
+      const availableEmoticonList = [...emoGroup.options)]
         .map(item => item.text)
         .filter(item => !cachedEmoticonList.includes(item));
 
