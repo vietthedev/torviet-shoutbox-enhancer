@@ -56,8 +56,10 @@ const EMOTICON = (() => {
 
       if (emoticonListToAdd === '') return;
 
-      cachedEmoticonList = cachedEmoticonList.concat(
-        emoticonListToAdd.filter(item => !cachedEmoticonList.includes(item)));
+      cachedEmoticonList = [
+        ...cachedEmoticonList,
+        ...emoticonListToAdd.filter(item => !cachedEmoticonList.includes(item))
+      ];
 
       GM_setValue('emoticonList', cachedEmoticonList);
       GM_deleteValue('emoticonListHtml');
