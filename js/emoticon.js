@@ -13,9 +13,9 @@ const EMOTICON = (() => {
 
     answer = prompt(message);
 
-    if (!answer || answer.trim() === '') return '';
+    if (!answer || answer.trim()) { return null; }
 
-    return answer.replace(/\s{2,}/g, ' ').trim().split(',');
+    return answer.trim().split(',');
   };
 
   const initEmoticonList = () => {
@@ -23,7 +23,7 @@ const EMOTICON = (() => {
 
     cachedEmoticonList = promptForEmoticonList('sử dụng', availableEmoticonList);
 
-    if (cachedEmoticonList === '') return;
+    if (!cachedEmoticonList) { return; }
 
     GM_setValue('emoticonList', cachedEmoticonList);
   };
@@ -54,7 +54,7 @@ const EMOTICON = (() => {
 
       const emoticonListToAdd = promptForEmoticonList('thêm', availableEmoticonList);
 
-      if (emoticonListToAdd === '') return;
+      if (!emoticonListToAdd) { return; }
 
       cachedEmoticonList = [
         ...cachedEmoticonList,
@@ -68,7 +68,7 @@ const EMOTICON = (() => {
     remove: () => {
       const emoticonListToRemove = promptForEmoticonList('xóa', cachedEmoticonList);
 
-      if (emoticonListToRemove === '') return;
+      if (!emoticonListToRemove) { return; }
 
       cachedEmoticonList =
         cachedEmoticonList.filter(item => !emoticonListToRemove.includes(item));
