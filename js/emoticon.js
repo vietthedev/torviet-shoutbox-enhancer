@@ -6,8 +6,8 @@ const EMOTICON = (() => {
     let message = `Chọn bộ emoticon bạn muốn ${action}:\n`;
     let answer = '';
 
-    message += emoticonList.reduce((accumulator, current, index) =>
-      accumulator + `${index + 1}. ${current}\n`, '');
+    message += emoticonList.reduce((previous, current, index) =>
+      previous + `${index + 1}. ${current}\n`, '');
 
     message += 'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường. Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
 
