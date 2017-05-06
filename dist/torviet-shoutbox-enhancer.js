@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      1.1.1
+// @version      1.1.2
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -15,46 +15,44 @@
 // @grant        GM_addStyle
 // ==/UserScript==
 
-(() => {
-  const allWrapper = document.getElementById('all-wrapper');
-  const boxHead = document.getElementById('boxHead');
-  const marquee = document.getElementById('marquee');
-  const sltTheme = document.getElementById('sltTheme');
-  const clock = document.getElementById('clock');
-  const idQuestion = document.getElementById('idQuestion');
-  const emoGroup = document.getElementById('emo-group');
-  const emoGroupDetail = document.getElementById('emo-group-detail');
+((w, d) => {
+  const allWrapper = d.getElementById('all-wrapper');
+  const boxHead = d.getElementById('boxHead');
+  const marquee = d.getElementById('marquee');
+  const sltTheme = d.getElementById('sltTheme');
+  const clock = d.getElementById('clock');
+  const idQuestion = d.getElementById('idQuestion');
+  const emoGroup = d.getElementById('emo-group');
+  const emoGroupDetail = d.getElementById('emo-group-detail');
   const apiPath = 'qa_smiley_ajax.php';
 
   class DomElementHelper {
     static appendSibling(newElement, referenceElement) {
-      if (!newElement) {
-        console.error('New element is invalid.');
-        return;
+      if (!newElement || !referenceElement) {
+        return false;
       }
 
-      if (!referenceElement) {
-        console.error('Reference element is invalid.');
-        return;
-      }
+      referenceElement.parentNode.insertBefore(newElement, referenceElement.nextSibling);
 
-      referenceElement.parentNode
-        .insertBefore(newElement, referenceElement.nextSibling);
+      return true;
     }
 
     static remove(element) {
       if (!element) {
-        console.error('Element to be removed is invalid.');
-        return;
+        return false;
       }
 
       element.parentNode.removeChild(element);
+
+      return true;
     }
   }
 
   class EmoticonService {
     static getEmoticon(emoticonName) {
-      if (isNaN(emoticonName) || !this.isInteger(emoticonName)) return Promise.resolve('');
+      if (isNaN(emoticonName) || !this.isInteger(emoticonName)) {
+        return Promise.resolve('');
+      }
 
       return Promise.resolve(`<div style="height:43px;width:43px;float:left;display:inline-block;margin: 0 0 1px 1px;"><img style="max-width:43px;max-height:43px;cursor:pointer;" src="/pic/smilies/${emoticonName}.gif" alt="[em${emoticonName}]"></div>`);
     }
@@ -99,16 +97,16 @@
       let message = `Chọn bộ emoticon bạn muốn ${action}:\n`;
       let answer = '';
 
-      message += emoticonList.reduce((accumulator, current, index) =>
-        accumulator + `${index + 1}. ${current}\n`, '');
+      message += emoticonList.reduce((previous, current, index) =>
+        previous + `${index + 1}. ${current}\n`, '');
 
       message += 'Điền tên bộ emoticon, ngăn cách bằng dấu phẩy, phân biệt hoa/thường. Có thể điền emoticon đơn bằng cách điền tên tập tin emoticon đó.\nVí dụ: Voz,707,Rage';
 
       answer = prompt(message);
 
-      if (!answer || answer.trim() === '') return '';
+      if (!answer || answer.trim()) { return null; }
 
-      return answer.replace(/\s{2,}/g, ' ').trim().split(',');
+      return answer.trim().split(',');
     };
 
     const initEmoticonList = () => {
@@ -116,7 +114,7 @@
 
       cachedEmoticonList = promptForEmoticonList('sử dụng', availableEmoticonList);
 
-      if (cachedEmoticonList === '') return;
+      if (!cachedEmoticonList) { return; }
 
       GM_setValue('emoticonList', cachedEmoticonList);
     };
@@ -141,37 +139,39 @@
         emoGroupDetail.innerHTML = cachedEmoticonListHtml;
       },
       add: () => {
-        const availableEmoticonList = Array(...emoGroup.options)
+        const availableEmoticonList = [...emoGroup.options)]
           .map(item => item.text)
           .filter(item => !cachedEmoticonList.includes(item));
 
         const emoticonListToAdd = promptForEmoticonList('thêm', availableEmoticonList);
 
-        if (emoticonListToAdd === '') return;
+        if (!emoticonListToAdd) { return; }
 
-        cachedEmoticonList = cachedEmoticonList.concat(
-          emoticonListToAdd.filter(item => !cachedEmoticonList.includes(item)));
+        cachedEmoticonList = [
+          ...cachedEmoticonList,
+          ...emoticonListToAdd.filter(item => !cachedEmoticonList.includes(item))
+        ];
 
         GM_setValue('emoticonList', cachedEmoticonList);
         GM_deleteValue('emoticonListHtml');
-        location.href = location.pathname;
+        w.location.href = w.location.pathname;
       },
       remove: () => {
         const emoticonListToRemove = promptForEmoticonList('xóa', cachedEmoticonList);
 
-        if (emoticonListToRemove === '') return;
+        if (!emoticonListToRemove) { return; }
 
         cachedEmoticonList =
           cachedEmoticonList.filter(item => !emoticonListToRemove.includes(item));
 
         GM_setValue('emoticonList', cachedEmoticonList);
         GM_deleteValue('emoticonListHtml');
-        location.href = location.pathname;
+        w.location.href = w.location.pathname;
       },
       clear: () => {
         GM_deleteValue('emoticonList');
         GM_deleteValue('emoticonListHtml');
-        location.href = location.pathname;
+        w.location.href = w.location.pathname;
       },
     };
   })();
@@ -199,30 +199,30 @@
 
   const stylesheet = isFirefoxBrowser() ?
     `
-    #wrapper-below {
-        height: calc(100% - 67px);
-    }
+      #wrapper-below {
+          height: calc(100% - 67px);
+      }
 
-    #emo-section {
-        height: calc(100% - 74px);
-    }
-    ` :
+      #emo-section {
+          height: calc(100% - 74px);
+      }
+      ` :
     `
-    #wrapper-below {
-        height: calc(100% - 62px);
-    }
+      #wrapper-below {
+          height: calc(100% - 62px);
+      }
 
-    #emo-section {
-        height: calc(100% - 69px);
-    }
-    `;
+      #emo-section {
+          height: calc(100% - 69px);
+      }
+      `;
 
   GM_addStyle(
     `
-    .slimScrollDiv, #emo-group-detail {
-        height: 100% !important;
-    }
-    ${stylesheet}`);
+      .slimScrollDiv, #emo-group-detail {
+          height: 100% !important;
+      }
+      ${stylesheet}`);
 
   const clockChild = document.createDocumentFragment();
   const span = document.createElement('span');
@@ -240,4 +240,4 @@
   EMOTICON.addToDom();
 
   idQuestion.focus();
-})();
+})(window, document);

@@ -15,4 +15,4 @@
 // @grant        GM_addStyle
 // ==/UserScript==
 
-(() => {
+((w, d) => {

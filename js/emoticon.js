@@ -63,7 +63,7 @@ const EMOTICON = (() => {
 
       GM_setValue('emoticonList', cachedEmoticonList);
       GM_deleteValue('emoticonListHtml');
-      location.href = location.pathname;
+      w.location.href = w.location.pathname;
     },
     remove: () => {
       const emoticonListToRemove = promptForEmoticonList('xóa', cachedEmoticonList);
@@ -75,12 +75,12 @@ const EMOTICON = (() => {
 
       GM_setValue('emoticonList', cachedEmoticonList);
       GM_deleteValue('emoticonListHtml');
-      location.href = location.pathname;
+      w.location.href = w.location.pathname;
     },
     clear: () => {
       GM_deleteValue('emoticonList');
       GM_deleteValue('emoticonListHtml');
-      location.href = location.pathname;
+      w.location.href = w.location.pathname;
     },
   };
 })();
