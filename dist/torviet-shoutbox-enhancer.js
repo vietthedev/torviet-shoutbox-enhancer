@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      1.1.2
+// @version      1.1.3
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -139,7 +139,7 @@
         emoGroupDetail.innerHTML = cachedEmoticonListHtml;
       },
       add: () => {
-        const availableEmoticonList = [...emoGroup.options)]
+        const availableEmoticonList = [...emoGroup.options]
           .map(item => item.text)
           .filter(item => !cachedEmoticonList.includes(item));
 
