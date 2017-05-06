@@ -13,13 +13,13 @@ const EMOTICON = (() => {
 
     answer = prompt(message);
 
-    if (!answer || answer.trim()) { return null; }
+    if (!answer || !answer.trim()) { return null; }
 
     return answer.trim().split(',');
   };
 
   const initEmoticonList = () => {
-    const availableEmoticonList = Array(...emoGroup.options).map(element => element.text);
+    const availableEmoticonList = [...emoGroup.options].map(element => element.text);
 
     cachedEmoticonList = promptForEmoticonList('sử dụng', availableEmoticonList);
 
@@ -35,7 +35,7 @@ const EMOTICON = (() => {
     addToDom: async () => {
       emoGroupDetail.innerHTML = '';
 
-      if (cachedEmoticonListHtml === '') {
+      if (!cachedEmoticonListHtml) {
         cachedEmoticonListHtml = (await Promise.all(cachedEmoticonList.map(async (item) => {
           return isNaN(item) ?
             await EmoticonService.getEmoticons(apiPath, item) :

@@ -27,6 +27,7 @@
   const apiPath = 'qa_smiley_ajax.php';
 
   class DomElementHelper {
+
     static appendSibling(newElement, referenceElement) {
       if (!newElement || !referenceElement) {
         return false;
@@ -36,6 +37,7 @@
 
       return true;
     }
+
 
     static remove(element) {
       if (!element) {
@@ -49,6 +51,7 @@
   }
 
   class EmoticonService {
+
     static getEmoticon(emoticonName) {
       if (isNaN(emoticonName) || !this.isInteger(emoticonName)) {
         return Promise.resolve('');
@@ -57,9 +60,11 @@
       return Promise.resolve(`<div style="height:43px;width:43px;float:left;display:inline-block;margin: 0 0 1px 1px;"><img style="max-width:43px;max-height:43px;cursor:pointer;" src="/pic/smilies/${emoticonName}.gif" alt="[em${emoticonName}]"></div>`);
     }
 
+
     static isInteger(number) {
       return number === parseInt(number, 10) || number === parseInt(number, 10).toString();
     }
+
 
     static getEmoticons(url, emoticonGroupName) {
       if (!url || !emoticonGroupName || !isNaN(emoticonGroupName)) {
@@ -104,13 +109,13 @@
 
       answer = prompt(message);
 
-      if (!answer || answer.trim()) { return null; }
+      if (!answer || !answer.trim()) { return null; }
 
       return answer.trim().split(',');
     };
 
     const initEmoticonList = () => {
-      const availableEmoticonList = Array(...emoGroup.options).map(element => element.text);
+      const availableEmoticonList = [...emoGroup.options].map(element => element.text);
 
       cachedEmoticonList = promptForEmoticonList('sử dụng', availableEmoticonList);
 
@@ -126,7 +131,7 @@
       addToDom: async () => {
         emoGroupDetail.innerHTML = '';
 
-        if (cachedEmoticonListHtml === '') {
+        if (!cachedEmoticonListHtml) {
           cachedEmoticonListHtml = (await Promise.all(cachedEmoticonList.map(async (item) => {
             return isNaN(item) ?
               await EmoticonService.getEmoticons(apiPath, item) :
