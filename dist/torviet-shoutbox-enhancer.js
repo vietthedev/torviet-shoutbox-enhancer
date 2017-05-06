@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TorViet Shoutbox Enhancer
 // @namespace    http://torviet.com/userdetails.php?id=1662
-// @version      1.1.4
+// @version      1.1.5
 // @license      http://www.wtfpl.net/txt/copying/
 // @homepageURL  https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer
 // @supportURL   https://github.com/S-a-l-a-d/TorViet-Shoutbox-Enhancer/issues
@@ -27,7 +27,6 @@
   const apiPath = 'qa_smiley_ajax.php';
 
   class DomElementHelper {
-
     static appendSibling(newElement, referenceElement) {
       if (!newElement || !referenceElement) {
         return false;
@@ -37,7 +36,6 @@
 
       return true;
     }
-
 
     static remove(element) {
       if (!element) {
@@ -51,7 +49,6 @@
   }
 
   class EmoticonService {
-
     static getEmoticon(emoticonName) {
       if (isNaN(emoticonName) || !this.isInteger(emoticonName)) {
         return Promise.resolve('');
@@ -60,11 +57,9 @@
       return Promise.resolve(`<div style="height:43px;width:43px;float:left;display:inline-block;margin: 0 0 1px 1px;"><img style="max-width:43px;max-height:43px;cursor:pointer;" src="/pic/smilies/${emoticonName}.gif" alt="[em${emoticonName}]"></div>`);
     }
 
-
     static isInteger(number) {
       return number === parseInt(number, 10) || number === parseInt(number, 10).toString();
     }
-
 
     static getEmoticons(url, emoticonGroupName) {
       if (!url || !emoticonGroupName || !isNaN(emoticonGroupName)) {
@@ -186,7 +181,7 @@
   }
 
   function createButton(text, event) {
-    const button = document.createElement('input');
+    const button = d.createElement('input');
     button.type = 'button';
     button.value = text;
     button.addEventListener('click', event);
@@ -229,8 +224,8 @@
       }
       ${stylesheet}`);
 
-  const clockChild = document.createDocumentFragment();
-  const span = document.createElement('span');
+  const clockChild = d.createDocumentFragment();
+  const span = d.createElement('span');
 
   span.innerHTML = 'For custom emoticon group<br>';
 
