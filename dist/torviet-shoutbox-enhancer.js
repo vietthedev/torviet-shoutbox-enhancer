@@ -15,15 +15,15 @@
 // @grant        GM_addStyle
 // ==/UserScript==
 
-((w, d) => {
-  const allWrapper = d.getElementById('all-wrapper');
-  const boxHead = d.getElementById('boxHead');
-  const marquee = d.getElementById('marquee');
-  const sltTheme = d.getElementById('sltTheme');
-  const clock = d.getElementById('clock');
-  const idQuestion = d.getElementById('idQuestion');
-  const emoGroup = d.getElementById('emo-group');
-  const emoGroupDetail = d.getElementById('emo-group-detail');
+((window, document) => {
+  const allWrapper = document.getElementById('all-wrapper');
+  const boxHead = document.getElementById('boxHead');
+  const marquee = document.getElementById('marquee');
+  const sltTheme = document.getElementById('sltTheme');
+  const clock = document.getElementById('clock');
+  const idQuestion = document.getElementById('idQuestion');
+  const emoGroup = document.getElementById('emo-group');
+  const emoGroupDetail = document.getElementById('emo-group-detail');
   const apiPath = 'qa_smiley_ajax.php';
 
   class DomElementHelper {
@@ -154,7 +154,7 @@
 
         GM_setValue('emoticonList', cachedEmoticonList);
         GM_deleteValue('emoticonListHtml');
-        w.location.href = w.location.pathname;
+        window.location.href = window.location.pathname;
       },
       remove: () => {
         const emoticonListToRemove = promptForEmoticonList('xóa', cachedEmoticonList);
@@ -166,12 +166,12 @@
 
         GM_setValue('emoticonList', cachedEmoticonList);
         GM_deleteValue('emoticonListHtml');
-        w.location.href = w.location.pathname;
+        window.location.href = window.location.pathname;
       },
       clear: () => {
         GM_deleteValue('emoticonList');
         GM_deleteValue('emoticonListHtml');
-        w.location.href = w.location.pathname;
+        window.location.href = window.location.pathname;
       },
     };
   })();
@@ -181,7 +181,7 @@
   }
 
   function createButton(text, event) {
-    const button = d.createElement('input');
+    const button = document.createElement('input');
     button.type = 'button';
     button.value = text;
     button.addEventListener('click', event);
@@ -224,8 +224,8 @@
       }
       ${stylesheet}`);
 
-  const clockChild = d.createDocumentFragment();
-  const span = d.createElement('span');
+  const clockChild = document.createDocumentFragment();
+  const span = document.createElement('span');
 
   span.innerHTML = 'For custom emoticon group<br>';
 

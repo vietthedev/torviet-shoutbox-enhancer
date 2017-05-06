@@ -3,7 +3,7 @@ function isFirefoxBrowser() {
 }
 
 function createButton(text, event) {
-  const button = d.createElement('input');
+  const button = document.createElement('input');
   button.type = 'button';
   button.value = text;
   button.addEventListener('click', event);
@@ -46,8 +46,8 @@ GM_addStyle(
     }
     ${stylesheet}`);
 
-const clockChild = d.createDocumentFragment();
-const span = d.createElement('span');
+const clockChild = document.createDocumentFragment();
+const span = document.createElement('span');
 
 span.innerHTML = 'For custom emoticon group<br>';
 
